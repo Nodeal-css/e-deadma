@@ -34,7 +34,7 @@
                     <i class="uil uil-folder"></i>
                     <span class="link-name">Deceased Records</span>
                 </a></li>
-                <li><a href="#">
+                <li><a href="adminPlotRecords.php">
                     <i class="uil uil-folder-open"></i>
                     <span class="link-name">Plot Records</span>
                 </a></li>
@@ -126,7 +126,7 @@
                       <option value="Divorced">Divorced</option>
                       <option value="Single">Single</option>
                   </select>
-                  <input type="text" id="age" name="age" class="w3-input" required>
+                  <input type="number" id="age" name="age" class="w3-input" required>
                   <input type="text" id="epitaph" name="epitaph" class="w3-input" required>
               </div>
           </div>
@@ -170,7 +170,7 @@
                   <option value="Divorced">Divorced</option>
                   <option value="Single">Single</option>
               </select>
-              <input type="text" id="upd-age" name="upd-age" class="w3-input" required>
+              <input type="number" id="upd-age" name="upd-age" class="w3-input" required>
               <input type="text" id="upd-epitaph" name="upd-epitaph" class="w3-input" required>
           </div>
       </div>

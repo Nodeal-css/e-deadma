@@ -33,7 +33,7 @@
                     <i class="uil uil-folder"></i>
                     <span class="link-name">Deceased Records</span>
                 </a></li>
-                <li><a href="#">
+                <li><a href="adminPlotRecords.php">
                     <i class="uil uil-folder-open"></i>
                     <span class="link-name">Plot Records</span>
                 </a></li>

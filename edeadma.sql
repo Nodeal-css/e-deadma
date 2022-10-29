@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 28, 2022 at 12:03 PM
+-- Generation Time: Oct 29, 2022 at 01:24 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -174,7 +174,15 @@ CREATE TABLE IF NOT EXISTS `owner` (
   `phone_no` varchar(15) DEFAULT NULL,
   `email` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`owner_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `owner`
+--
+
+INSERT INTO `owner` (`owner_id`, `fname`, `lname`, `mi`, `street`, `city`, `zip`, `phone_no`, `email`) VALUES
+(1, 'Wilma', 'Sooth', 'Y', 'St. Ronald street', 'Davao City', '7712', '0918242152', 'example@example.com'),
+(2, 'Anthony', 'Parker', 'F', 'St. Martha street', 'Naga City', '2451', '09884512231', 'example@example.com');
 
 -- --------------------------------------------------------
 
@@ -190,15 +198,21 @@ CREATE TABLE IF NOT EXISTS `plot_ownership` (
   `cemetery_id` int(11) NOT NULL,
   `date_purchased` date NOT NULL,
   `purchase_price` int(11) DEFAULT NULL,
-  `burial_fee` int(11) DEFAULT NULL,
-  `amount_paid` int(11) DEFAULT NULL,
   `ownership_status` varchar(20) NOT NULL,
-  `square_meters` varchar(11) DEFAULT '2.5 x 8',
+  `square_meters` varchar(20) DEFAULT '2.5 x 8',
   PRIMARY KEY (`plot_id`),
   KEY `grave_id` (`grave_id`),
   KEY `owner_id` (`owner_id`),
   KEY `cemetery_id` (`cemetery_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `plot_ownership`
+--
+
+INSERT INTO `plot_ownership` (`plot_id`, `grave_id`, `owner_id`, `cemetery_id`, `date_purchased`, `purchase_price`, `ownership_status`, `square_meters`) VALUES
+(2, NULL, 1, 3, '2022-10-12', 90211, 'active', '2.5 x 8 feet'),
+(3, NULL, 2, 3, '2022-10-15', 87112, 'active', '3 x 8 meters');
 
 --
 -- Constraints for dumped tables
