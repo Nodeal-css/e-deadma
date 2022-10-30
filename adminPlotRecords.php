@@ -97,7 +97,7 @@
 <!-- Modal for adding Plot records-->
 <div class="w3-modal" id="modal-plot-record">
 	<div class="w3-modal-content">
-		<span onclick="document.getElementById('modal-plot-record').style.display='none'" style="background-color: rgb(223, 116, 67);color:white;" class="w3-button w3-display-topright">&times;</span>
+		<span onclick="closeModal();" style="background-color: rgb(223, 116, 67);color:white;" class="w3-button w3-display-topright">&times;</span>
 		<header class="w3-padding" style="background-color: rgb(223, 116, 67);">
 			<h2 style="color:white;">Plot Ownership</h2>
 		</header>
@@ -159,6 +159,7 @@
   	$("#btn-display-owner").click(function(){
   		flag = true;
   		$("#owner-info").show();
+        $("#owner-find").hide();
   		console.log("flag: " + flag);
   	});
 
@@ -246,19 +247,58 @@
 	}
 
   //Create a function that will accept 2 input modes
-  //1. For plot ownership that has existing owner records in the database
+  //1. For plot ownership that has existing owner records in the database note: hide owner id input
   //2. For new Plot ownerhip and owner information
+  //
+  //NEXT ASSIGNMENT
+  //formulate some input validations to check for null fields & label the two forms namely Plot & owner
+  //hide 'add new owner after clicked'
+  //test the adding of plot_ownership if there will be anomalies - double check
   function addPlotRecord(){
+    var id = $("#owner-id").val();
+    var owner = $("#owner-find").val();
+    var date_purchase = $("#date-purchase").val();
+    var purchase_price = $("#purchase-price").val();
+    var sqr = $("#sqr-meters").val();
+
+    var fname = $("#owner-fname").val();
+    var lname = $("#owner-lname").val();
+    var mi = $("#owner-mi").val();
+    var street = $("#owner-street").val();
+    var city = $("#owner-city").val();
+    var zip = $("#owner-zip").val();
+    var phone = $("#owner-phone").val();
+    var email = $("#owner-email").val();
+
   	if(flag){
   		// for not existing owner record
-  	}else{
-  		// for existing owner record
-        var id = $("#owner-id").val();
-  		var owner = $("#owner-find").val();
-  		var date_purchase = $("#date-purchase").val();
-  		var purchase_price = $("#purchase-price").val();
-  		var sqr = $("#sqr-meters").val();
+        $.ajax({
+            url:'includes/functionAddPlotRecordMode2.php',
+            type:'post',
+            data:{
+                firstname:fname,
+                lastname:lname,
+                middle:mi,
+                street_address:street,
+                city_address:city,
+                zip_code:zip,
+                phone_no:phone,
+                email_address:email,
+                date_pur:date_purchase, // plot owner ship
+                purch_price:purchase_price,
+                ownership:'active',
+                sqr_area:sqr
+            },
+            success:function(data, status){
+                //do something
+                alert(data);
 
+                clearInputFields();
+                $("#owner-find").show();
+                document.getElementById('modal-plot-record').style.display = 'none';
+            }
+        });
+  	}else{
   		$.ajax({
   			url:'includes/functionAddPlotRecordMode1.php',
   			type:'post',
@@ -272,11 +312,7 @@
   			success:function(data, status){
                 alert(data);
                 //close the modal and clear fields
-                $("#owner-id").val('');
-                $("#owner-find").val('');
-                $("#date-purchase").val('');
-                $("#purchase-price").val('');
-                $("#sqr-meters").val('');
+                clearInputFields();
                 document.getElementById('modal-plot-record').style.display = 'none';
   			}
   		});
@@ -284,8 +320,36 @@
 
   	//reset flag here - false
     //Refresh the gridView everytime there will be a new record added.
+    flag = false;
   }
-	
+
+  //void method for closing the modal. to reset the contents before opening it once again
+  function closeModal(){
+    document.getElementById('modal-plot-record').style.display = 'none';
+    $("#owner-info").hide();
+    $("#owner-find").show();
+    flag = false;
+    console.log("flag: " + flag);
+  }
+
+  //function to clear all the input fields of the modal
+  function clearInputFields(){
+    $("#owner-id").val('');
+    $("#owner-find").val('');
+    $("#date-purchase").val('');
+    $("#purchase-price").val('');
+    $("#sqr-meters").val('');
+
+    $("#owner-fname").val('');
+    $("#owner-lname").val('');
+    $("#owner-mi").val('');
+    $("#owner-street").val('');
+    $("#owner-city").val('');
+    $("#owner-zip").val('');
+    $("#owner-phone").val('');
+    $("#owner-email").val('');
+    $("#owner-info").hide();
+  }
 </script>
 <!-- End line of javascript -->
 </body>
