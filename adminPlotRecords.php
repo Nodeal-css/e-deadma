@@ -105,7 +105,7 @@
 			<div class="w3-col s5 w3-left" id="plot-info">
 				<label class="w3-left">Owner </label><button class="w3-right" id="btn-display-owner">Add new owner</button>
                 <input type="hidden" name="owner-id" id="owner-id">
-				<input type="text" class="w3-input" name="owner-find" id="owner-find">
+				<input type="text" class="w3-input" name="owner-find" id="owner-find" autocomplete="off">
 				<div id="back-result-owner" style="position:fixed;background-color: white;"></div>
 				<label>Date of purchase</label>
 				<input type="date" class="w3-input" name="date-purchase" id="date-purchase">
@@ -160,6 +160,7 @@
   		flag = true;
   		$("#owner-info").show();
         $("#owner-find").hide();
+        $("#btn-display-owner").hide();
   		console.log("flag: " + flag);
   	});
 
@@ -221,21 +222,25 @@
 
   //function to search up existing owner record | similar in adminCemetery.php to find cemetery
   function findOwner(){
-  	$("#owner-find").keyup(function(){
-  		$("#back-result-owner").show();
-  		var owner = $("#owner-find").val();
-  		console.log("owner: " + owner);
-  		$.ajax({
-  			url:'includes/functionFindOwner.php',
-  			type:'post',
-  			data:{
-  				owner_name:owner
-  			},
-  			success:function(data, status){
-  				$("#back-result-owner").html(data);
-  			}
-  		});
-  	});
+      $("#owner-find").keyup(function(){
+      	$("#back-result-owner").show();
+      	var owner = $("#owner-find").val();
+      	console.log("owner: " + owner);
+        if(owner != ""){
+          	$.ajax({
+          		url:'includes/functionFindOwner.php',
+          		type:'post',
+          		data:{
+          			owner_name:owner
+          		},
+          		success:function(data, status){
+          			$("#back-result-owner").html(data);
+          		}
+          	});
+        }else{
+            $("#back-result-owner").html('');
+        }
+      });
   }
 
   	// function to close the search drop down
@@ -254,6 +259,7 @@
   //formulate some input validations to check for null fields & label the two forms namely Plot & owner
   //hide 'add new owner after clicked'
   //test the adding of plot_ownership if there will be anomalies - double check
+  //test in the next session | try different input scenarios
   function addPlotRecord(){
     var id = $("#owner-id").val();
     var owner = $("#owner-find").val();
@@ -272,6 +278,17 @@
 
   	if(flag){
   		// for not existing owner record
+        addPlotRecord2(fname, lname, mi, street, city, zip, phone, email, date_purchase, purchase_price, sqr);
+  	}else{
+  		addPlotRecord1(id, date_purchase, purchase_price, sqr);
+  	}
+    //Refresh the gridView everytime there will be a new record added.
+    
+  }
+
+  //function for adding non existing owner for plot_ownership table
+  function addPlotRecord2(fname, lname, mi, street, city, zip, phone, email, date_purchase, purchase_price, sqr){
+    if(fname != "" && lname != "" && mi != "" && street != "" && city != "" && zip != "" && phone != "" && email != "" && date_purchase != "" && purchase_price != "" && sqr != ""){
         $.ajax({
             url:'includes/functionAddPlotRecordMode2.php',
             type:'post',
@@ -292,35 +309,41 @@
             success:function(data, status){
                 //do something
                 alert(data);
-
+                flag = false;
                 clearInputFields();
                 $("#owner-find").show();
                 document.getElementById('modal-plot-record').style.display = 'none';
             }
         });
-  	}else{
-  		$.ajax({
-  			url:'includes/functionAddPlotRecordMode1.php',
-  			type:'post',
-  			data:{
+    }else{
+        alert('Please input empty fields flag: ' + flag);
+    }
+  }
+
+  //function for adding existing owner for plot_ownership table
+  function addPlotRecord1(id, date_purchase, purchase_price, sqr){
+    if(id != "" && date_purchase != "" && purchase_price != "" && sqr != ""){
+        $.ajax({
+            url:'includes/functionAddPlotRecordMode1.php',
+            type:'post',
+            data:{
                 owner:id,
                 date_pur:date_purchase,
                 purch_price:purchase_price,
                 ownership:'active',
                 sqr_area:sqr
             },
-  			success:function(data, status){
+            success:function(data, status){
                 alert(data);
                 //close the modal and clear fields
+                flag = false;
                 clearInputFields();
                 document.getElementById('modal-plot-record').style.display = 'none';
-  			}
-  		});
-  	}
-
-  	//reset flag here - false
-    //Refresh the gridView everytime there will be a new record added.
-    flag = false;
+            }
+        });
+    }else{
+        alert('Please input empty fields flag: ' + flag);
+    }
   }
 
   //void method for closing the modal. to reset the contents before opening it once again
@@ -328,6 +351,7 @@
     document.getElementById('modal-plot-record').style.display = 'none';
     $("#owner-info").hide();
     $("#owner-find").show();
+    $("#btn-display-owner").show();
     flag = false;
     console.log("flag: " + flag);
   }
@@ -349,6 +373,7 @@
     $("#owner-phone").val('');
     $("#owner-email").val('');
     $("#owner-info").hide();
+    $("#btn-display-owner").show();
   }
 </script>
 <!-- End line of javascript -->
