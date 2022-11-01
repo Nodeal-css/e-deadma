@@ -105,7 +105,7 @@
 			<div class="w3-col s5 w3-left" id="plot-info">
 				<label class="w3-left">Owner </label><button class="w3-right" id="btn-display-owner">Add new owner</button>
                 <input type="hidden" name="owner-id" id="owner-id">
-				<input type="text" class="w3-input" name="owner-find" id="owner-find" autocomplete="off">
+				<input type="text" class="w3-input" name="owner-find" id="owner-find" autocomplete="off" placeholder="Choose from the dropdown">
 				<div id="back-result-owner" style="position:fixed;background-color: white;"></div>
 				<label>Date of purchase</label>
 				<input type="date" class="w3-input" name="date-purchase" id="date-purchase">
@@ -221,6 +221,7 @@
   }
 
   //function to search up existing owner record | similar in adminCemetery.php to find cemetery
+  //update this function where in the name will bring the owner id during keyup
   function findOwner(){
       $("#owner-find").keyup(function(){
       	$("#back-result-owner").show();
@@ -256,10 +257,11 @@
   //2. For new Plot ownerhip and owner information
   //
   //NEXT ASSIGNMENT
-  //formulate some input validations to check for null fields & label the two forms namely Plot & owner
-  //hide 'add new owner after clicked'
-  //test the adding of plot_ownership if there will be anomalies - double check
-  //test in the next session | try different input scenarios
+  //
+  //
+  //
+  //
+  //update this function where in the name will bring the owner id during keyup
   function addPlotRecord(){
     var id = $("#owner-id").val();
     var owner = $("#owner-find").val();
@@ -280,7 +282,7 @@
   		// for not existing owner record
         addPlotRecord2(fname, lname, mi, street, city, zip, phone, email, date_purchase, purchase_price, sqr);
   	}else{
-  		addPlotRecord1(id, date_purchase, purchase_price, sqr);
+  		addPlotRecord1(id, owner, date_purchase, purchase_price, sqr);
   	}
     //Refresh the gridView everytime there will be a new record added.
     
@@ -321,8 +323,8 @@
   }
 
   //function for adding existing owner for plot_ownership table
-  function addPlotRecord1(id, date_purchase, purchase_price, sqr){
-    if(id != "" && date_purchase != "" && purchase_price != "" && sqr != ""){
+  function addPlotRecord1(id, owner, date_purchase, purchase_price, sqr){
+    if(id != "" && owner != "" && date_purchase != "" && purchase_price != "" && sqr != ""){
         $.ajax({
             url:'includes/functionAddPlotRecordMode1.php',
             type:'post',
@@ -351,6 +353,7 @@
     document.getElementById('modal-plot-record').style.display = 'none';
     $("#owner-info").hide();
     $("#owner-find").show();
+    $("#back-result-owner").hide();
     $("#btn-display-owner").show();
     flag = false;
     console.log("flag: " + flag);
