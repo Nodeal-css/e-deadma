@@ -85,7 +85,7 @@
                 <button class="w3-button w3-bordered w3-right w3-margin-bottom w3-round" onclick="document.getElementById('modal-plot-record').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Add +</button>
 
                 <!-- Main content -->
-                <div>
+                <div id="grid-view">
                     
                 </div>
                 <!-- Main content -->
@@ -149,7 +149,7 @@
     	checkSession();
     	findOwner();
    		getSession();
-   		//getPlotRecords()
+        displayPlotOwnership();
 
    		console.log("flag: " + flag);
    		$("#owner-info").hide();
@@ -259,8 +259,8 @@
   //NEXT ASSIGNMENT
   //
   //
-  //
-  //
+  //set ajax functions to async = false 
+  //note: testing the loading of grid view nov 4, 2022
   //update this function where in the name will bring the owner id during keyup
   function addPlotRecord(){
     var id = $("#owner-id").val();
@@ -281,8 +281,10 @@
   	if(flag){
   		// for not existing owner record
         addPlotRecord2(fname, lname, mi, street, city, zip, phone, email, date_purchase, purchase_price, sqr);
+        displayPlotOwnership();
   	}else{
   		addPlotRecord1(id, owner, date_purchase, purchase_price, sqr);
+        displayPlotOwnership();
   	}
     //Refresh the gridView everytime there will be a new record added.
     
@@ -378,6 +380,21 @@
     $("#owner-info").hide();
     $("#btn-display-owner").show();
   }
+
+  //display plot_ownership using gridview
+  function displayPlotOwnership(){
+    $.ajax({
+        url:'includes/functionDisplayPlotOwnership.php',
+        type:'post',
+        data:{
+            request:'request'
+        },
+        success:function(data, status){
+            $("#grid-view").html(data);
+        }
+    });
+  }
+
 </script>
 <!-- End line of javascript -->
 </body>
