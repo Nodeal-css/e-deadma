@@ -58,7 +58,7 @@
             
         </div>
     </nav>
-    <!-- Endof navigation menu -->
+<!-- Endof navigation menu -->
 
     <!-- Start of Plot records Dashboard-->
     <section class="dashboard">
@@ -99,7 +99,7 @@
 	<div class="w3-modal-content">
 		<span onclick="closeModal();" style="background-color: rgb(223, 116, 67);color:white;" class="w3-button w3-display-topright">&times;</span>
 		<header class="w3-padding" style="background-color: rgb(223, 116, 67);">
-			<h2 style="color:white;">Plot Ownership</h2>
+			<h2 style="color:white;">Add Plot Record</h2>
 		</header>
 		<div class="w3-row w3-padding">
 			<div class="w3-col s5 w3-left" id="plot-info">
@@ -139,6 +139,49 @@
 	</div>
 </div>
 <!-- End of Modal for adding Plot records-->
+
+<!-- Start of Modal for viewing the plot records -->
+<div class="w3-modal" id="mdl-view">
+    <div class="w3-modal-content">
+        <span onclick="document.getElementById('mdl-view').style.display = 'none'" style="background-color: rgb(223, 116, 67);color:white;" class="w3-button w3-display-topright">&times;</span>
+        <header class="w3-padding" style="background-color: rgb(223, 116, 67);">
+            <h2 style="color:white;">Plot Ownership</h2>
+        </header>
+        <div class="w3-row w3-padding">
+            <div class="w3-col s6">
+                <table class="w3-table">
+                    <tr><td></td><td><b>Plot</b></td></tr>
+                    <tr><td class="w3-right">Date purchased: </td><td><input type="text" class="w3-input" name="vw-date-purchase" id="vw-date-purchase" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Price: </td><td><input type="text" class="w3-input" name="vw-price" id="vw-price" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Status: </td><td><input type="text" class="w3-input" name="vw-status" id="vw-status" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Square meters: </td><td><input type="text" class="w3-input" name="vw-sqr-meters" id="vw-sqr-meters" style="width:80%;"></td></tr>
+                    <tr><td>plot: </td><td><input type="text" class="w3-input" name="vw-plot-id" id="vw-plot-id" style="width:80%;"></td></tr>
+                    <tr><td>grave id: </td><td><input type="text" class="w3-input" name="vw-grave-id" id="vw-grave-id" style="width:80%;"></td></tr>
+                </table>
+                <div class="w3-container w3-center w3-round-xlarge" style="width: 100%;min-height: 190px;background-color: darkred;"><h4>Cemetery deed...</h4></div>
+            </div>
+            <div class="w3-col s6">
+                <table class="w3-table">
+                    <tr><td></td><td><b>Owner</b></td></tr>
+                    <tr><td class="w3-right">First name: </td><td><input type="text" class="w3-input" name="vw-fname" id="vw-fname" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Last name: </td><td><input type="text" class="w3-input" name="vw-lname" id="vw-lname" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Middle initial: </td><td><input type="text" class="w3-input" name="vw-mi" id="vw-mi" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Street address: </td><td><input type="text" class="w3-input" name="vw-street" id="vw-street" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">City address: </td><td><input type="text" class="w3-input" name="vw-city" id="vw-city" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Zip code: </td><td><input type="text" class="w3-input" name="vw-zip" id="vw-zip" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Phone #: </td><td><input type="text" class="w3-input" name="vw-phone" id="vw-phone" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Email: </td><td><input type="text" class="w3-input" name="vw-email" id="vw-email" style="width:80%;"></td></tr>
+                    <tr><td>owner: </td><td><input type="text" class="w3-input" name="vw-owner-id" id="vw-owner-id" style="width:80%;"></td></tr>
+                </table>
+            </div>
+        </div>
+        <div class="w3-container">
+            <button class="w3-button w3-round w3-right" style="background-color: rgb(223, 116, 67);color: white;" onclick="">Locate</button>
+            <button class="w3-button w3-round w3-right" style="background-color: rgb(223, 116, 67);color: white;margin-right: 20px;" onclick="">Open .pdf</button>
+        </div>
+    </div>
+</div>
+<!-- End of Modal for viewing the plot records -->
 
 <!-- Start of javascript -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -394,6 +437,45 @@
         }
     });
   }
+
+  //function to populate data in opening #mdl-view
+  function openModalView(plot_id, owner_id){
+    document.getElementById('mdl-view').style.display = 'block';
+    $("#vw-plot-id").val(plot_id);
+    $("#vw-owner-id").val(owner_id);
+
+    $.ajax({
+        url:'includes/functionViewPlot.php',
+        type:'post',
+        data:{
+            plotID:plot_id
+        },
+        success:function(data, status){
+            //console.log(data);
+            var obj = JSON.parse(data);
+            
+            $("#vw-date-purchase").val(obj.date_purchased);
+            $("#vw-price").val(obj.purchase_price);
+            $("#vw-status").val(obj.ownership_status);
+            $("#vw-sqr-meters").val(obj.square_meters);
+            $("#vw-grave-id").val(obj.grave_id);
+
+            $("#vw-fname").val(obj.firstname);
+            $("#vw-lname").val(obj.lastname);
+            $("#vw-mi").val(obj.middle);
+            $("#vw-street").val(obj.street_add);
+            $("#vw-city").val(obj.city_add);
+            $("#vw-zip").val(obj.zip_code);
+            $("#vw-phone").val(obj.phone_num);
+            $("#vw-email").val(obj.email_address);
+        }
+    });
+  }
+
+  //clear fields on view modal
+
+  //close view modal
+
 
 </script>
 <!-- End line of javascript -->

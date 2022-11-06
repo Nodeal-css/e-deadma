@@ -7,9 +7,8 @@ if(isset($_POST['request'])){
 	$sql = "SELECT cemetery.cemetery_name AS cemetery_name, CONCAT(fname, ' ', mi, '. ', lname) AS name FROM cemetery, authorized_account WHERE cemetery.cemetery_id = authorized_account.cemetery_id AND authorized_account.account_id = '$user_id'";
 	$result = mysqli_query($conn, $sql);
 	$response = array();
-	while($row = mysqli_fetch_assoc($result)){
-		$response = $row;
-	}
+	$row = mysqli_fetch_assoc($result);
+	$response = $row;
 	echo json_encode($response);
 }else{
 	echo 'none';
