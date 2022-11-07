@@ -3,8 +3,16 @@ Requirements for running php
 - directory for WAMP(c:\wamp\www)
 - directory for XXAMP(C:\xampp\htdocs)
 
+
+_______________________________________________________________
 Note:
 Please import the edeadma.sql file to the mysql admin 
 and name the database as 'edeadma' since the php called for that
 specific database in the connection to mysql server,
 refer to:'connectDB.php' file
+---------------------------------------------------------------
+
+_________________________________
+Required path for this directory:
+D:/WAMP/www/edeadma/
+---------------------------------

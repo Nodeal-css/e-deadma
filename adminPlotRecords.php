@@ -158,7 +158,16 @@
                     <tr><td>plot: </td><td><input type="text" class="w3-input" name="vw-plot-id" id="vw-plot-id" style="width:80%;"></td></tr>
                     <tr><td>grave id: </td><td><input type="text" class="w3-input" name="vw-grave-id" id="vw-grave-id" style="width:80%;"></td></tr>
                 </table>
-                <div class="w3-container w3-center w3-round-xlarge" style="width: 100%;min-height: 190px;background-color: darkred;"><h4>Cemetery deed...</h4></div>
+                <div class="w3-container w3-center w3-round-xlarge" style="width: 100%;min-height: 190px;background-color: royalblue;">
+                    <h4>Cemetery deed...</h4>
+                    <div>
+                        <form id="file-upload">
+                            <input type="hidden" name="upload-plot-id" id="upload-plot-id">
+                            <input type="file" name="upload-pdf" id="upload-pdf">
+                            <button type="submit" id="submit-pdf">Upload</button>
+                        </form>
+                    </div>
+                </div>
             </div>
             <div class="w3-col s6">
                 <table class="w3-table">
@@ -303,8 +312,9 @@
   //
   //
   //set ajax functions to async = false 
-  //note: testing the loading of grid view nov 4, 2022
+  //
   //update this function where in the name will bring the owner id during keyup
+  //user will have to click the drop down div so that owner_id will output to the #owner-id
   function addPlotRecord(){
     var id = $("#owner-id").val();
     var owner = $("#owner-find").val();
@@ -443,6 +453,7 @@
     document.getElementById('mdl-view').style.display = 'block';
     $("#vw-plot-id").val(plot_id);
     $("#vw-owner-id").val(owner_id);
+    $("#upload-plot-id").val(plot_id);
 
     $.ajax({
         url:'includes/functionViewPlot.php',
@@ -476,6 +487,27 @@
 
   //close view modal
 
+  //function to upload pdf file
+  //Assignment:
+  //Update this part wherein after insert - will change the appearance of document field - display pdf
+  //Note: that there's only one document per plot_record
+  $("#file-upload").on('submit', function(e) {
+    e.preventDefault();
+    var form = document.getElementById('file-upload');
+    var fdata = new FormData(form);
+    var plot = $("#upload-plot-id").val();
+    $.ajax({
+        type:'post',
+        url:'includes/uploadPDF.php',
+        data:fdata, 
+        contentType: false,
+        cache: false,
+        processData:false,
+        success:function(data, status){
+            alert(data);
+        }
+    });
+  });
 
 </script>
 <!-- End line of javascript -->
