@@ -11,20 +11,24 @@ if(isset($_FILES['upload-pdf']['name'])){
 
 	if($tempfile != ""){
 		$path = $folder.$filename;
-		$move = move_uploaded_file($tempfile, $folder.$filename);
+		if(substr($filename, -3) == 'pdf'){
+			$move = move_uploaded_file($tempfile, $folder.$filename);
 
-		if($move){
-			$sql = "INSERT INTO `cemetery_deed`(`deed_id`, `plot_id`, `document`) VALUES (null, '$plot_id', '$path')";
-			
-			if(mysqli_query($conn, $sql)){
-				echo 'Successfully uploaded ';
+			if($move){
+				$sql = "INSERT INTO `cemetery_deed`(`deed_id`, `plot_id`, `document`) VALUES (null, '$plot_id', '$path')";
+				
+				if(mysqli_query($conn, $sql)){
+					echo 'Successfully uploaded ';
+				}else{
+					echo 'Error: ' . mysqli_error($conn);
+				}
+
+				
 			}else{
-				echo 'Error: ' . mysqli_error($conn);
+				echo 'Something is wrong, file not uploaded';
 			}
-
-			
 		}else{
-			echo 'Something is wrong, file not uploaded';
+			echo 'Pls upload pdf format';
 		}
 
 	}

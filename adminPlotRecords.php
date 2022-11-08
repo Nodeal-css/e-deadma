@@ -143,7 +143,7 @@
 <!-- Start of Modal for viewing the plot records -->
 <div class="w3-modal" id="mdl-view">
     <div class="w3-modal-content">
-        <span onclick="document.getElementById('mdl-view').style.display = 'none'" style="background-color: rgb(223, 116, 67);color:white;" class="w3-button w3-display-topright">&times;</span>
+        <span onclick="closeVWModal();" style="background-color: rgb(223, 116, 67);color:white;" class="w3-button w3-display-topright">&times;</span>
         <header class="w3-padding" style="background-color: rgb(223, 116, 67);">
             <h2 style="color:white;">Plot Ownership</h2>
         </header>
@@ -161,10 +161,13 @@
                 <div class="w3-container w3-center w3-round-xlarge" style="width: 100%;min-height: 190px;background-color: royalblue;">
                     <h4>Cemetery deed...</h4>
                     <div>
+                        <div onclick="openPDFwindow();">
+                                <iframe src="" id="deed-thumbnail" type="application/pdf" height="180" width="150"></iframe> 
+                        </div>
                         <form id="file-upload">
                             <input type="hidden" name="upload-plot-id" id="upload-plot-id">
-                            <input type="file" name="upload-pdf" id="upload-pdf">
-                            <button type="submit" id="submit-pdf">Upload</button>
+                            <input type="file" name="upload-pdf" id="upload-pdf" accept="application/pdf">
+                            <button type="submit" class="w3-button" id="submit-pdf">Upload</button>
                         </form>
                     </div>
                 </div>
@@ -186,7 +189,6 @@
         </div>
         <div class="w3-container">
             <button class="w3-button w3-round w3-right" style="background-color: rgb(223, 116, 67);color: white;" onclick="">Locate</button>
-            <button class="w3-button w3-round w3-right" style="background-color: rgb(223, 116, 67);color: white;margin-right: 20px;" onclick="">Open .pdf</button>
         </div>
     </div>
 </div>
@@ -479,13 +481,36 @@
             $("#vw-zip").val(obj.zip_code);
             $("#vw-phone").val(obj.phone_num);
             $("#vw-email").val(obj.email_address);
+
+            if(obj.pdf_path != null){
+                $("#deed-thumbnail").attr("src", obj.pdf_path.substring(20));
+                console.log("output: " + $("#deed-thumbnail").attr("src"));
+            }
         }
     });
   }
-
+  
   //clear fields on view modal
-
   //close view modal
+  function closeVWModal(){
+    $("#vw-date-purchase").val('');
+    $("#vw-price").val('');
+    $("#vw-status").val('');
+    $("#vw-sqr-meters").val('');
+    $("#vw-grave-id").val('');
+
+    $("#vw-fname").val('');
+    $("#vw-lname").val('');
+    $("#vw-mi").val('');
+    $("#vw-street").val('');
+    $("#vw-city").val('');
+    $("#vw-zip").val('');
+    $("#vw-phone").val('');
+    $("#vw-email").val(''); 
+
+    $("#deed-thumbnail").attr("src", "");
+    document.getElementById('mdl-view').style.display = 'none';
+  }
 
   //function to upload pdf file
   //Assignment:
@@ -508,6 +533,14 @@
         }
     });
   });
+
+  //An onclick function to open a pdf file to another window
+  function openPDFwindow(){
+    var pdfPath = $("#deed-thumbnail").attr("src");
+    if(pdfPath != ""){
+        window.open(pdfPath, '_blank');
+    }
+  }
 
 </script>
 <!-- End line of javascript -->
