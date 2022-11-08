@@ -204,6 +204,7 @@
     	findOwner();
    		getSession();
         displayPlotOwnership();
+        deleteCache();
 
    		console.log("flag: " + flag);
    		$("#owner-info").hide();
@@ -507,8 +508,10 @@
     $("#vw-zip").val('');
     $("#vw-phone").val('');
     $("#vw-email").val(''); 
+    $("#upload-plot-id").val('');
 
     $("#deed-thumbnail").attr("src", "");
+    $("#upload-pdf").val(null);
     document.getElementById('mdl-view').style.display = 'none';
   }
 
@@ -516,6 +519,10 @@
   //Assignment:
   //Update this part wherein after insert - will change the appearance of document field - display pdf
   //Note: that there's only one document per plot_record
+  //
+  //ATTENTION: 
+  //MUST delete multiple files if not associated to the records in the database
+  //created deletion event - pls try to test next session
   $("#file-upload").on('submit', function(e) {
     e.preventDefault();
     var form = document.getElementById('file-upload');
@@ -530,6 +537,9 @@
         processData:false,
         success:function(data, status){
             alert(data);
+            $("#upload-pdf").val(null);
+            openModalView(plot, $("#vw-owner-id").val());
+            //closeVWModal();
         }
     });
   });
@@ -540,6 +550,20 @@
     if(pdfPath != ""){
         window.open(pdfPath, '_blank');
     }
+  }
+
+  //function to delete pdf files in the documents folder to avoid duplication
+  function deleteCache(){
+    $.ajax({
+        type:'post',
+        url:'includes/deletePDF.php',
+        data:{
+            request:'delete'
+        },
+        success:function(data, status){
+            console.log(data);
+        }
+    });
   }
 
 </script>
