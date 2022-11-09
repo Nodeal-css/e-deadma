@@ -39,7 +39,7 @@
                     <i class="uil uil-folder-open"></i>
                     <span class="link-name">Plot Records</span>
                 </a></li>
-                <li><a href="map.html">
+                <li><a href="adminCemeteryMap.php">
                     <i class="uil uil-location-point"></i>
                     <span class="link-name">Cemetery Map</span>
                 </a></li>
