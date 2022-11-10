@@ -94,18 +94,17 @@
                     <span class="text" id="logo_cem_name">Dashboard / Cemetery Map</span>
                 </div>
 
-                <button class="w3-button w3-bordered w3-right w3-margin-bottom w3-round" onclick="" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
+                <button class="w3-button w3-bordered w3-right w3-margin-bottom w3-round" onclick="document.getElementById('modal-import-map').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
 
                 <!-- Start of the Map -->
                 <div style="width:100%;height:480px;background-color: #bfcbff;" class="w3-row">
                     <div class="w3-col s9" style="width:700px;margin-right:20px;height:400px;overflow:scroll;">
                     	<div id="workspace">
-                    		<img src="maps/googlemap.jpg" usemap="#map" id="map-pic" onclick="">
+                    		<img src="" usemap="#map" id="map-pic" onclick="">
                     	</div>
                     </div>
                     <div class="w3-col s3">
-                    	<button>Status</button>
-                    	<button>Search</button>
+                    	<!-- This area or div will show the legends assigned-->
                     </div>
                 </div>
                 <div>
@@ -119,6 +118,25 @@
         <!-- End Workspace-->
     </section>
 
+<!-- Start Modal for importing a new image for map layout -->
+<div id="modal-import-map" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<span onclick="document.getElementById('modal-import-map').style.display='none'" style="color: white;background-color: rgb(223, 116, 67);" class="w3-button w3-display-topright">&times;</span>
+		<header class="w3-padding" style="background-color: rgb(223, 116, 67);">
+			<h2 style="color: white;">Import map layout</h2>
+		</header>
+		<form id="upload-image-map">
+			<div class="w3-center" style="margin-top: 50px; margin-bottom: 50px;">
+				<input type="file" name="upload-map" id="upload-map" accept=".jpg, .jpeg, .png">
+			</div>
+			<div class="w3-center">
+				<button id="submit-map" class="w3-button" style="background-color: rgb(223, 116, 67);color: white;">Upload</button>
+			</div>
+		</form>
+	</div>
+</div>
+<!-- End of Modal for importing a new image for map layout -->
+
 <!-- Javascript starts -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
@@ -126,7 +144,7 @@
 		checkSession();
        	getSession();
 
-       	getWidthHeight();
+		displayImgMap();
 	});
 
 	// this function checks for session, will automatically load with the document
@@ -189,10 +207,10 @@
   	function getWidthHeight(){
   		var w = $("#map-pic").width();
   		var h = $("#map-pic").height();
-  		console.log("width: " + w);
-  		console.log("height: " + h);
 
   		$("#workspace").width(w).height(h);
+		console.log("width: " + $("#workspace").width());
+  		console.log("height: " + $("#workspace").height());
   	}
 
   	//Event listener to track the coordinates on moving the mouse inside the image
@@ -201,6 +219,51 @@
   		$("#tempX").val(event.offsetX);
   		$("#tempY").val(event.offsetY);
   	});
+
+	//Function to upload the image-map to the maps folder & cemetery database
+	$("#upload-image-map").on("submit", function(e) {
+		e.preventDefault();
+		var form = document.getElementById('upload-image-map');
+		var fdata = new FormData(form);
+
+		$.ajax({
+			type:'post',
+			url:'includes/uploadMap.php',
+			data:fdata,
+			contentType: false,
+			cache: false,
+			processData: false,
+			success:function(data, status){
+				alert(data);
+				$("#upload-map").val(null);
+				document.getElementById('modal-import-map').style.display = 'none';
+				//Display the new image of the map
+				displayImgMap();
+			}
+		});
+	});
+
+	//Function to display the image map on #map-pic. NOTE: include the function after uploading and loading the page.
+	function displayImgMap(){
+	var req = 'request';
+		$.ajax({
+			type:'post',
+			url:'includes/functionLoadMap.php',
+			data:{
+				request:req
+			},
+			success:function(result, status){
+				var object = JSON.parse(result);
+				$("#map-pic").attr("src", object.cemetery_map_img.substring(20));
+				
+				console.log("output: " + $("#map-pic").attr("src"));
+				if($("#map-pic").attr("src") != null){
+					getWidthHeight();
+				}
+			
+			}
+		});
+	}
 
 </script>
 <!-- Javascript Ends -->
