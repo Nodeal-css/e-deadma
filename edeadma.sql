@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 08, 2022 at 02:12 PM
+-- Generation Time: Nov 10, 2022 at 02:50 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -69,9 +69,7 @@ CREATE TABLE IF NOT EXISTS `cemetery` (
   `zip` varchar(10) NOT NULL,
   `cemetery_type` varchar(20) NOT NULL,
   `pass_code` varchar(30) NOT NULL,
-  `cemetery_map_img` blob,
-  `map_height` int(11) DEFAULT NULL,
-  `map_width` int(11) DEFAULT NULL,
+  `cemetery_map_img` varchar(120) DEFAULT NULL,
   PRIMARY KEY (`cemetery_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
@@ -79,9 +77,9 @@ CREATE TABLE IF NOT EXISTS `cemetery` (
 -- Dumping data for table `cemetery`
 --
 
-INSERT INTO `cemetery` (`cemetery_id`, `cemetery_name`, `street`, `city`, `zip`, `cemetery_type`, `pass_code`, `cemetery_map_img`, `map_height`, `map_width`) VALUES
-(2, 'Triumphant', 'dapdap', 'carcar', '6099', 'PRIVATE', '12345', NULL, NULL, NULL),
-(3, 'Manila Memorial', 'San Jose Street', 'Lapu-Lapu', '8712', 'PUBLIC', '12345', NULL, NULL, NULL);
+INSERT INTO `cemetery` (`cemetery_id`, `cemetery_name`, `street`, `city`, `zip`, `cemetery_type`, `pass_code`, `cemetery_map_img`) VALUES
+(2, 'Triumphant', 'dapdap', 'carcar', '6099', 'PRIVATE', '12345', NULL),
+(3, 'Manila Memorial', 'San Jose Street', 'Lapu-Lapu', '8712', 'PUBLIC', '12345', 'D:/WAMP/www/edeadma/maps/16680915692ekoyndx71151.jpg');
 
 -- --------------------------------------------------------
 
