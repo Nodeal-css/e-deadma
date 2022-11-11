@@ -145,6 +145,8 @@
        	getSession();
 
 		displayImgMap();
+		//testing deletecacheimages
+		deleteCacheImages();
 	});
 
 	// this function checks for session, will automatically load with the document
@@ -244,6 +246,7 @@
 	});
 
 	//Function to display the image map on #map-pic. NOTE: include the function after uploading and loading the page.
+	// Fix the workspace width and height
 	function displayImgMap(){
 	var req = 'request';
 		$.ajax({
@@ -257,10 +260,21 @@
 				$("#map-pic").attr("src", object.cemetery_map_img.substring(20));
 				
 				console.log("output: " + $("#map-pic").attr("src"));
-				if($("#map-pic").attr("src") != null){
-					getWidthHeight();
-				}
-			
+				getWidthHeight();
+			}
+		});
+	}
+
+	//Method to delete images that are not found in the database
+	function deleteCacheImages(){
+		$.ajax({
+			type:'post',
+			url:'includes/deleteImageMaps.php',
+			data:{
+				request:'delete'
+			},
+			success:function(data, status){
+				console.log(data);
 			}
 		});
 	}

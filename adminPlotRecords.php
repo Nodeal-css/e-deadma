@@ -527,7 +527,7 @@
     e.preventDefault();
     var form = document.getElementById('file-upload');
     var fdata = new FormData(form);
-    var plot = $("#upload-plot-id").val();
+    
     $.ajax({
         type:'post',
         url:'includes/uploadPDF.php',
