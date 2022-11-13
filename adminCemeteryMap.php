@@ -125,6 +125,12 @@
         <!-- End Workspace-->
     </section>
 
+<!-- Start of displaying map html -->
+<map name="map" id="map-display">
+	
+</map>
+<!-- End of displaying map html -->
+
 <!-- Start Modal for importing a new image for map layout -->
 <div id="modal-import-map" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
@@ -144,17 +150,54 @@
 </div>
 <!-- End of Modal for importing a new image for map layout -->
 
+<!-- Start of Modal for opening a grave/block -->
+<div class="w3-modal w3-animate-opacity" id="modal-grave">
+	<div class="w3-modal-content">
+		<span onclick="document.getElementById('modal-grave').style.display='none'" style="color: white;background-color: rgb(223, 116, 67);" class="w3-button w3-display-topright">&times;</span>
+		<header class="w3-padding" style="background-color: rgb(223, 116, 67);">
+			<h2 style="color: white;">Grave</h2>
+		</header>
+		<input type="text" name="grave-id" id="grave-id" readonly>
+		<button onclick="">Delete</button>
+	</div>
+</div>
+<!-- Start of Modal for opening a grave/block -->
+
 <!-- Javascript starts -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-imagemapster@1.2.10/dist/jquery.imagemapster.min.js"></script>
+<script type="text/javascript">
 	$(document).ready(function() {
 		checkSession();
        	getSession();
 
 		displayImgMap();
-		//testing deletecacheimages
 		deleteCacheImages();
+		getAllCoordinates();
 	});
+
+	//Function to display all the graves using mapster framework |
+	//Note: error will occur when image is not yet loaded. So this method is called inside #map-pic onload
+	function loadGraves(){
+		if($('#map-pic').attr('src') != ""){
+			$('#map-pic').mapster({
+				areas: [
+					{
+						key: 'grave',
+						fillColor: 'ffffff',
+						staticState: true,
+						stroke: true,
+						strokeColor: '063970',
+						strokeWidth: '3'
+					}
+				],
+				mapKey: 'state'
+			});
+		}else{
+			alert('not finished, reloading the page');
+			window.location.href ="adminCemeteryMap.php";
+		}
+	}
 
 	// this function checks for session, will automatically load with the document
 	function checkSession(){
@@ -223,10 +266,12 @@
   	}
 
   	//Event listener to track the coordinates on moving the mouse inside the image
+	var x;
+	var y;
   	$("#map-pic").mousemove(function(event) {
   		//console.log("X: " + event.offsetX + "\n" + "Y: " + event.offsetY);
-  		$("#tempX").val(event.offsetX);
-  		$("#tempY").val(event.offsetY);
+		x = event.offsetX;
+		y = event.offsetY;
   	});
 
 	//Function to upload the image-map to the maps folder & cemetery database
@@ -259,20 +304,22 @@
 		$.ajax({
 			type:'post',
 			url:'includes/functionLoadMap.php',
+			async: true,
 			data:{
 				request:req
 			},
 			success:function(result, status){
-				var object = JSON.parse(result);
-				$("#map-pic").attr("src", object.cemetery_map_img.substring(20));
+				$("#map-pic").attr("src", result.substring(20));
 				
 				console.log("output: " + $("#map-pic").attr("src"));
+				console.log("status: " + status);
 			}
 		});
 	}
 	//Onload of image
-	$("#map-pic").on('load', function(){
+	$("#map-pic").ready(function() {
 		getWidthHeight();
+		
 	});
 
 	//Method to delete images that are not found in the database
@@ -292,17 +339,17 @@
 	//Click on image to populate coordinates in the properties
 	function clickOnImage(){
 		if(x1.value.length == 0 && x2.value.length == 0 && x3.value.length == 0 && x4.value.length == 0){
-			$("#x1").val($("#tempX").val());
-			$("#y1").val($("#tempY").val());
+			$("#x1").val(x);
+			$("#y1").val(y);
 		}else if(x2.value.length == 0 && x1.value.length > 0){
-			$("#x2").val($("#tempX").val());
-			$("#y2").val($("#tempY").val());
+			$("#x2").val(x);
+			$("#y2").val(y);
 		}else if(x3.value.length == 0 && x2.value.length > 0){
-			$("#x3").val($("#tempX").val());
-			$("#y3").val($("#tempY").val());
+			$("#x3").val(x);
+			$("#y3").val(y);
 		}else if(x4.value.length == 0 && x3.value.length > 0){
-			$("#x4").val($("#tempX").val());
-			$("#y4").val($("#tempY").val());
+			$("#x4").val(x);
+			$("#y4").val(y);
 		}else{
 			alert('Reached the maximum points of adding a block');
 		}
@@ -347,6 +394,7 @@
 				},
 				success:function(result, status){
 					alert(result);
+					getAllCoordinates();
 				}
 			});
 		}else{
@@ -357,7 +405,27 @@
 		clearCoordinates();
 	}
 
-	//In the next session: implement the mapster and display the graves
+	//Function that will get the coordinates to display in the map
+	function getAllCoordinates(){
+		var req = 'request';
+		$.ajax({
+			type:'post',
+			url:'includes/functionGetAllCoordinates.php',
+			data:{
+				request:req
+			},
+			success:function(result, status){
+				$('#map-display').html(result);
+				loadGraves();
+			}
+		});
+	}
+
+	/*Function to open a modal and send the grave id
+	function openGraveModal(grave_id){
+		document.document.getElementById('modal-grave').style.display = 'block';
+		$("#grave-id").val(grave_id);
+	}*/
 
 </script>
 <!-- Javascript Ends -->
