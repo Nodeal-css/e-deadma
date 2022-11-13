@@ -94,23 +94,30 @@
                     <span class="text" id="logo_cem_name">Dashboard / Cemetery Map</span>
                 </div>
 
-                <button class="w3-button w3-bordered w3-right w3-margin-bottom w3-round" onclick="document.getElementById('modal-import-map').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
+                <button class="w3-button w3-bordered w3-left w3-margin w3-round" onclick="document.getElementById('modal-import-map').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
 
                 <!-- Start of the Map -->
-                <div style="width:100%;height:480px;background-color: #bfcbff;" class="w3-row">
-                    <div class="w3-col s9" style="width:700px;margin-right:20px;height:400px;overflow:scroll;">
+                <div style="width:100%;height:480px;" class="w3-row w3-card-4 w3-container">
+                    <div class="w3-col s9" style="width:800px;margin-right:20px;height:400px;overflow:scroll;">
                     	<div id="workspace">
-                    		<img src="" usemap="#map" id="map-pic" onclick="">
+                    		<img src="" usemap="#map" id="map-pic" onclick="clickOnImage();">
                     	</div>
                     </div>
                     <div class="w3-col s3">
                     	<!-- This area or div will show the legends assigned-->
                     </div>
                 </div>
-                <div>
-                	<table>
-	                	<tr><td><label>X: </label><input type="text" name="tempX" id="tempX" readonly></td><td><label>Y:</label><input type="text" name="tempY" id="tempY" readonly></td><td></td><td></td><td></td></tr>
-	                </table>
+				
+				<div class="w3-row w3-padding-16">
+					<div class="w3-col s9" style="font-size: 11px;">
+						<table style="border: 0px solid;">
+							<tr><td>Properties</td><td></td><td></td><td></td></tr>
+							<tr><td></td><td>Point A</td><td>Point B</td><td>Point C</td><td>Point D</td></tr>
+							<tr><td><label>X: </label><input type="text" name="tempX" id="tempX" style="border: 0px;width: 90px;" readonly></td><td><label>X: </label><input type="text" name="x1" id="x1" style="border: 0px;width:90px;" readonly></td><td><label>X: </label><input type="text" name="x2" id="x2" style="border: 0px;width:90px;" readonly></td><td><label>X: </label><input type="text" name="x3" id="x3" style="border: 0px;width:90px;" readonly></td><td><label>X: </label><input type="text" name="x4" id="x4" style="border: 0px;width:90px;" readonly></td><td style="width:80px;"></td><td><button class="w3-button w3-right" style="background-color: rgb(223, 116, 67);color: white;" onclick="addCoordinates();">Save Coordinates</button></td></tr>
+							<tr><td><label>Y: </label><input type="text" name="tempY" id="tempY" style="border: 0px;width: 90px;" readonly></td><td><label>Y: </label><input type="text" name="y1" id="y1" style="border: 0px;width:90px;" readonly></td><td><label>Y: </label><input type="text" name="y2" id="y2" style="border: 0px;width:90px;" readonly></td><td><label>Y: </label><input type="text" name="y3" id="y3" style="border: 0px;width:90px;" readonly></td><td><label>Y: </label><input type="text" name="y4" id="y4" style="border: 0px;width:90px;" readonly></td><td style="width:80px;"></td><td><button class="w3-button w3-right" style="background-color: #4169e1;color: white;" onclick="clearCoordinates();">Clear</button></td></tr>
+						</table>
+					</div>
+					<div class="w3-col s3"></div>
                 </div>
                 <!-- End of the Map -->
             </div>
@@ -260,10 +267,13 @@
 				$("#map-pic").attr("src", object.cemetery_map_img.substring(20));
 				
 				console.log("output: " + $("#map-pic").attr("src"));
-				getWidthHeight();
 			}
 		});
 	}
+	//Onload of image
+	$("#map-pic").on('load', function(){
+		getWidthHeight();
+	});
 
 	//Method to delete images that are not found in the database
 	function deleteCacheImages(){
@@ -278,6 +288,76 @@
 			}
 		});
 	}
+
+	//Click on image to populate coordinates in the properties
+	function clickOnImage(){
+		if(x1.value.length == 0 && x2.value.length == 0 && x3.value.length == 0 && x4.value.length == 0){
+			$("#x1").val($("#tempX").val());
+			$("#y1").val($("#tempY").val());
+		}else if(x2.value.length == 0 && x1.value.length > 0){
+			$("#x2").val($("#tempX").val());
+			$("#y2").val($("#tempY").val());
+		}else if(x3.value.length == 0 && x2.value.length > 0){
+			$("#x3").val($("#tempX").val());
+			$("#y3").val($("#tempY").val());
+		}else if(x4.value.length == 0 && x3.value.length > 0){
+			$("#x4").val($("#tempX").val());
+			$("#y4").val($("#tempY").val());
+		}else{
+			alert('Reached the maximum points of adding a block');
+		}
+	}
+
+	//Clear the input fields of the coordinates by clicking the cear button
+	function clearCoordinates(){
+		$("#x1").val('');
+		$("#y1").val('');
+		$("#x2").val('');
+		$("#y2").val('');
+		$("#x3").val('');
+		$("#y3").val('');
+		$("#x4").val('');
+		$("#y4").val('');
+	}
+
+	//Save coordinates to the database
+	function addCoordinates(){
+		var x1 = $("#x1").val();
+		var y1 = $("#y1").val();
+		var x2 = $("#x2").val();
+		var y2 = $("#y2").val();
+		var x3 = $("#x3").val();
+		var y3 = $("#y3").val();
+		var x4 = $("#x4").val();
+		var y4 = $("#y4").val();
+		if(x1 != "" && y1 != "" && x2 != "" && y2 != "" && x3 != "" && y3 != "" && x4 != "" && y4 != ""){
+			$.ajax({
+				type:'post',
+				url:'includes/functionInsertCoordinates.php',
+				data:{
+					req:'insert',
+					axis_x1:x1,
+					axis_y1:y1,
+					axis_x2:x2,
+					axis_y2:y2,
+					axis_x3:x3,
+					axis_y3:y3,
+					axis_x4:x4,
+					axis_y4:y4
+				},
+				success:function(result, status){
+					alert(result);
+				}
+			});
+		}else{
+			alert('Sorry, you have entered an incomplete block entry.\nPlease specify the four edges of a block.');
+		}
+		
+		//clear coords at the end
+		clearCoordinates();
+	}
+
+	//In the next session: implement the mapster and display the graves
 
 </script>
 <!-- Javascript Ends -->
