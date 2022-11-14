@@ -78,8 +78,8 @@
             <i class="uil uil-bars sidebar-toggle"></i>
 
             <div class="search-box">
-                <input type="text" placeholder="Search by name" id="search-deceased">
-                <i class="uil uil-search" style="margin-left: 240px;" onclick=""></i>
+                <input type="text" placeholder="Search by name" id="search-grave">
+                <i class="uil uil-search" style="margin-left: 240px;" onclick="searchGrave();"></i>
             </div>
             <div>
                 <p id="active-user" style="float:left;margin-top: 20px;margin-right: 10px;"></p>
@@ -95,6 +95,7 @@
                 </div>
 
                 <button class="w3-button w3-bordered w3-left w3-margin w3-round" onclick="document.getElementById('modal-import-map').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
+				<button class="w3-button w3-bordered w3-left w3-margin w3-round" onclick="checkVacantGrave();" style="background-color: rgb(223, 116, 67);color: white;">Check vacant graves</button>
 
                 <!-- Start of the Map -->
                 <div style="width:100%;height:480px;" class="w3-row w3-card-4 w3-container">
@@ -113,8 +114,8 @@
 						<table style="border: 0px solid;">
 							<tr><td>Properties</td><td></td><td></td><td></td></tr>
 							<tr><td></td><td>Point A</td><td>Point B</td><td>Point C</td><td>Point D</td></tr>
-							<tr><td><label>X: </label><input type="text" name="tempX" id="tempX" style="border: 0px;width: 90px;" readonly></td><td><label>X: </label><input type="text" name="x1" id="x1" style="border: 0px;width:90px;" readonly></td><td><label>X: </label><input type="text" name="x2" id="x2" style="border: 0px;width:90px;" readonly></td><td><label>X: </label><input type="text" name="x3" id="x3" style="border: 0px;width:90px;" readonly></td><td><label>X: </label><input type="text" name="x4" id="x4" style="border: 0px;width:90px;" readonly></td><td style="width:80px;"></td><td><button class="w3-button w3-right" style="background-color: rgb(223, 116, 67);color: white;" onclick="addCoordinates();">Save Coordinates</button></td></tr>
-							<tr><td><label>Y: </label><input type="text" name="tempY" id="tempY" style="border: 0px;width: 90px;" readonly></td><td><label>Y: </label><input type="text" name="y1" id="y1" style="border: 0px;width:90px;" readonly></td><td><label>Y: </label><input type="text" name="y2" id="y2" style="border: 0px;width:90px;" readonly></td><td><label>Y: </label><input type="text" name="y3" id="y3" style="border: 0px;width:90px;" readonly></td><td><label>Y: </label><input type="text" name="y4" id="y4" style="border: 0px;width:90px;" readonly></td><td style="width:80px;"></td><td><button class="w3-button w3-right" style="background-color: #4169e1;color: white;" onclick="clearCoordinates();">Clear</button></td></tr>
+							<tr><td><input type="hidden" name="tempX" id="tempX" style="border: 0px;width: 90px;" readonly></td><td><label>X: </label><input type="text" name="x1" id="x1" style="border: 0px;width:90px;" readonly></td><td><label>X: </label><input type="text" name="x2" id="x2" style="border: 0px;width:90px;" readonly></td><td><label>X: </label><input type="text" name="x3" id="x3" style="border: 0px;width:90px;" readonly></td><td><label>X: </label><input type="text" name="x4" id="x4" style="border: 0px;width:90px;" readonly></td><td style="width:80px;"></td><td><button class="w3-button w3-right" style="background-color: rgb(223, 116, 67);color: white;" onclick="addCoordinates();">Save Coordinates</button></td></tr>
+							<tr><td><input type="hidden" name="tempY" id="tempY" style="border: 0px;width: 90px;" readonly></td><td><label>Y: </label><input type="text" name="y1" id="y1" style="border: 0px;width:90px;" readonly></td><td><label>Y: </label><input type="text" name="y2" id="y2" style="border: 0px;width:90px;" readonly></td><td><label>Y: </label><input type="text" name="y3" id="y3" style="border: 0px;width:90px;" readonly></td><td><label>Y: </label><input type="text" name="y4" id="y4" style="border: 0px;width:90px;" readonly></td><td style="width:80px;"></td><td><button class="w3-button w3-right" style="background-color: #4169e1;color: white;" onclick="clearCoordinates();">Clear</button></td></tr>
 						</table>
 					</div>
 					<div class="w3-col s3"></div>
@@ -158,7 +159,7 @@
 			<h2 style="color: white;">Grave</h2>
 		</header>
 		<input type="text" name="grave-id" id="grave-id" readonly>
-		<button onclick="">Delete</button>
+		<button onclick="deleteBlock();">Delete</button>
 	</div>
 </div>
 <!-- Start of Modal for opening a grave/block -->
@@ -188,6 +189,30 @@
 						staticState: true,
 						stroke: true,
 						strokeColor: '063970',
+						strokeWidth: '3'
+					},
+					{
+						key: 'search-grave',
+						fillColor: 'ffffff',
+						staticState: true,
+						stroke: true,
+						strokeColor: 'fcba03',
+						strokeWidth: '3'
+					},
+					{
+						key: 'vacant',
+						fillColor: 'ffffff',
+						staticState: true,
+						stroke: true,
+						strokeColor: '078200',
+						strokeWidth: '3'
+					},
+					{
+						key: 'occupied',
+						fillColor: 'ffffff',
+						staticState: true,
+						stroke: true,
+						strokeColor: 'fc2003',
 						strokeWidth: '3'
 					}
 				],
@@ -421,11 +446,70 @@
 		});
 	}
 
-	/*Function to open a modal and send the grave id
+	//Function to open a modal and send the grave id
+	//This function is under developed | this is meant to populated with info about the deceased and plot owner if available
 	function openGraveModal(grave_id){
-		document.document.getElementById('modal-grave').style.display = 'block';
+		document.getElementById('modal-grave').style.display = 'block';
 		$("#grave-id").val(grave_id);
-	}*/
+	}
+
+	//Function to search a specific grave and load new element inside #map-display 
+	//Change the function to be able to search by name of the deceased or grave id
+	function searchGrave(){
+		var grave_id = $("#search-grave").val();
+		//console.log('grave_id: ' + grave_id);
+		$.ajax({
+			type:'post',
+			url:'includes/functionGetAllCoordinates.php',
+			data:{
+				search:'search-grave',
+				grave:grave_id
+			},
+			success:function(result, status){
+				$("#map-display").html(result);
+				loadGraves();
+
+				$("#search-grave").val('');
+			}
+		});
+	}
+
+	//Function to re-layer the mapster to red and green if it is vacant or occupied | on button click
+	function checkVacantGrave(){
+		var request = 'vacancy';
+		$.ajax({
+			type:'post',
+			url:'includes/functionGetAllCoordinates.php',
+			data:{
+				vacancy:request
+			},
+			success:function(result, status){
+				$("#map-display").html(result);
+				loadGraves();
+				//console.log(result);
+			}
+		});
+	}
+
+	//Function to delete a grave/block | done inside the modal
+	//set the grave_id of both deceased & plot_ownership table to null in able to fully delete 
+	//without restraints. PROMPT the changes, to inform the user.
+	function deleteBlock(){
+		var block = $("#grave-id").val();
+		$.ajax({
+			type:'post',
+			url:'includes/functionDeleteGrave.php',
+			data:{
+				grave_id:block
+			},
+			success:function(result, status){
+				alert(result);
+				$("#grave-id").val('');
+				document.getElementById('modal-grave').style.display = 'none';
+				getAllCoordinates();
+			}
+		});
+	}
 
 </script>
 <!-- Javascript Ends -->
