@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Admin Login</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+	<title>Grave.ly Login</title>
+	<link rel="stylesheet" href="css/login.css">
 	
 </head>
 <body>
 	<!-- header starts-->
-	<header class="" style="position: fixed;background-color: lightcoral;height: 50px;width: 100%;">
+	<!-- header class="" style="position: fixed;background-color: lightcoral;height: 50px;width: 100%;">
 		<nav class="nav" style="float: right;">
 			<a class="nav-link active" aria-current="page" href="#">Active</a>
 			<a class="nav-link" href="#">Link</a>
@@ -18,9 +18,8 @@
 			<a class="nav-link disabled">Disabled</a>
 		</nav>
 	</header>
-	<!-- Header ends -->
-
-	<!-- Main starts-->
+	< Header ends >
+	< Main starts>
 	<main class="flex-grow-1" style="background: url('assets/body.png');background-repeat: no-repeat; background-size: 100% 100%;height: 100%;width: 100%;position: absolute;z-index: -1;">
 		<div class="mt-5 container">
 			<div class="d-flex flex-row-reverse" style="height:auto;">
@@ -45,9 +44,37 @@
 		</div>
 
 	</main>
-	<!-- header ends-->
+	< header ends >
+	< Javascript load last -->
 
-	<!-- Javascript load last -->
+	<div class="main">
+        <div class="navbar">
+            <div class="icon">
+                <h2 class="logo">Gravely</h2>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="#">HOME</a></li>
+                    <li><a href="#">ABOUT</a></li>
+                </ul>
+            </div>
+        </div> 
+        <div class="content">
+            <h1>Cemetery Records<br><span>ease of access</span> <br>Visit the graves of your love ones</h1>
+                <button class="cn"><a href="#">Cemetery Map</a></button>
+                <div class="form">
+                    <h2>Login as Administrator</h2>
+                    <input type="text" name="user-name" id="user-name" placeholder="Enter Username" required>
+                    <input type="password" name="pass-word" id="pass-word" placeholder="Enter Password" required>
+                    <button class="btnn" onclick="login();">Login</button>
+                    
+                    <p class="link">Don't have an account<br>
+                    <a href="#" class="att">Create New Account </a> here</a></p>
+                </div>
+                    </div>
+                </div>
+        </div>
+    </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 	

@@ -153,13 +153,29 @@
 
 <!-- Start of Modal for opening a grave/block -->
 <div class="w3-modal w3-animate-opacity" id="modal-grave">
-	<div class="w3-modal-content">
-		<span onclick="document.getElementById('modal-grave').style.display='none'" style="color: white;background-color: rgb(223, 116, 67);" class="w3-button w3-display-topright">&times;</span>
+	<div class="w3-modal-content" style="width: 40%;">
+		<span onclick="closeGraveModal();" style="color: white;background-color: rgb(223, 116, 67);" class="w3-button w3-display-topright">&times;</span>
 		<header class="w3-padding" style="background-color: rgb(223, 116, 67);">
 			<h2 style="color: white;">Grave</h2>
 		</header>
-		<input type="text" name="grave-id" id="grave-id" readonly>
-		<button onclick="deleteBlock();">Delete</button>
+		<!-- Start modal Main Content -->
+		<div class="w3-bar" style="color: white;background-color: rgb(223, 116, 67);">
+			<button id="load-Deceased" class="w3-bar-item w3-button" onclick="loadDeceasedModal();" style="color: white;background-color: rgb(223, 116, 67);">Deceased</button>
+			<button id="load-Plot" class="w3-bar-item w3-button" onclick="loadPlotModal();" style="color: white;background-color: rgb(223, 116, 67);">Plot record</button>
+		</div>
+			<div id="modal-deceased-record" class="w3-container w3-border city" style="display:none;">
+				
+			</div>
+			<div id="modal-plot-owner" class ="w3-container w3-border city"  style="display:none;">
+				<!--div class="w3-panel w3-red w3-round-xlarge">
+					
+				</div-->
+			</div>
+		<!-- End modal Main Content -->
+		<div class="w3-container" id="modal-footer">
+			<input type="text" name="grave-id" id="grave-id">
+			<button onclick="deleteBlock();" class="w3-button w3-right w3-red">Delete</button>
+		</div>
 	</div>
 </div>
 <!-- Start of Modal for opening a grave/block -->
@@ -451,6 +467,15 @@
 	function openGraveModal(grave_id){
 		document.getElementById('modal-grave').style.display = 'block';
 		$("#grave-id").val(grave_id);
+		loadDeceasedModal();
+	}
+
+	//function to close the #modal-grave | clear the fields
+	function closeGraveModal(){
+		document.getElementById('modal-grave').style.display = 'none';
+		document.getElementById('modal-deceased-record').style.display = 'none';
+		document.getElementById('modal-plot-owner').style.display = 'none';
+		$("#grave-id").val('');
 	}
 
 	//Function to search a specific grave and load new element inside #map-display 
@@ -510,7 +535,31 @@
 			}
 		});
 	}
+	//function to load the deceased records inside the grave
+	// Assign the maximum width of this div element
+	function loadDeceasedModal(){
+		document.getElementById('modal-deceased-record').style.display = 'block';
+		document.getElementById('modal-plot-owner').style.display = 'none';
+		var block = $("#grave-id").val();
+		$.ajax({
+			type:'post',
+			url:'includes/populateModalDeceased.php',
+			data:{
+				grave_id: block
+			},
+			success:function(result, status){
+				$("#modal-deceased-record").html(result);
+			}
+		});
+	}
 
+	//function to load the plot record of the grave
+	function loadPlotModal(){
+		document.getElementById('modal-deceased-record').style.display = 'none';
+		document.getElementById('modal-plot-owner').style.display = 'block';
+		
+	}
+// End of #modal-grave javascript
 </script>
 <!-- Javascript Ends -->
 </body>
