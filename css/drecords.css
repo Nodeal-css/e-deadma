@@ -278,11 +278,29 @@ nav.close ~ .dashboard .top{
     cursor: pointer;
 }
 .dash-content .w3-table th{
-    height: 70px;
+    height: 50px;
+    text-align: center;
 }
 .dash-content .w3-table #table-body{
     font-size: 15px;
     font-weight: 400;
+}
+.dash-content .w3-table #table-body td{
+    text-align: center;
+}
+#table-body{
+    color: var(--black-light-color);
+    text-transform: uppercase;
+    text-align: justify;
+}
+#table-body tr:hover{
+    background: var(--hover-color);
+}
+.w3-table, tr, th {
+    border-bottom: 1px solid var(--primary-color);
+    border-radius: 10px;
+    vertical-align: bottom;
+    cursor: default;
 }
 /* ---------------- */
 #modal-insert .w3-modal-content{
@@ -328,24 +346,15 @@ nav.close ~ .dashboard .top{
     font-weight: 500;
     font-size: 17px;
 }
+.isert1 p{
+    padding-top: 17px;
+    font-weight: 500;
+    font-size: 17px;
+}
 .isert button{
     background-color: rgb(223, 116, 67);
     color: white;
     margin-top: 8px;
-}
-.w3-table, tr, th {
-    border-bottom: 1px solid var(--primary-color);
-    border-radius: 10px;
-    vertical-align: bottom;
-    cursor: default;
-}
-#table-body{
-    color: var(--black-light-color);
-    text-transform: uppercase;
-    text-align: justify;
-}
-#table-body tr:hover{
-    background: var(--hover-color);
 }
 .w3-modal-content .btn-up .bs{
     background-color: rgb(223, 116, 67);
