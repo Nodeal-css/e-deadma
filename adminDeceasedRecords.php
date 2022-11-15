@@ -5,7 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<!-- CSS  -->
-    <link rel="stylesheet" href="css/admin.css">
+
+    <link rel="stylesheet" href="css/drecords.css?v=<?php echo time(); ?>">
     
     <!-- Iconscout CSS para sa mga icons ne -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
@@ -38,7 +39,7 @@
                     <i class="uil uil-folder-open"></i>
                     <span class="link-name">Plot Records</span>
                 </a></li>
-                <li><a href="map.html">
+                <li><a href="adminCemeteryMap.php">
                     <i class="uil uil-location-point"></i>
                     <span class="link-name">Cemetery Map</span>
                 </a></li>
@@ -64,11 +65,11 @@
 
             <div class="search-box">
                 <input type="text" placeholder="Search by name" id="search-deceased">
-                <i class="uil uil-search" style="margin-left: 240px;" onclick="searchDeceasedRecords();"></i>
+                <i class="uil uil-search" onclick="searchDeceasedRecords();"></i>
             </div>
             <div>
-                <p id="active-user" style="float:left;margin-top: 20px;margin-right: 10px;"></p>
-                <img src="assets/PP.webp" alt="">
+                <p id="active-user"></p>
+                <img src="assets/people.png">
             </div>
         </div>
 
@@ -79,11 +80,20 @@
                     <span class="text" id="logo_cem_name">Dashboard</span>
                 </div>
 
-                <button class="w3-button w3-bordered w3-right w3-margin-bottom w3-round" onclick="document.getElementById('modal-insert').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Add</button>
+                <button onclick="document.getElementById('modal-insert').style.display='block'">Add</button>
                 <div>
                     <table class="w3-table">
                     	<thead>
-                    		<tr><th>First name</th><th>Last name</th><th>Middle Initial</th><th>Date of Burial</th><th>Date of Birth</th><th>Marital status</th><th>Age</th><th>Epitaph</th></tr>
+                    		<tr>
+                                <th>First name</th>
+                                <th>Last name</th>
+                                <th>Middle Initial</th>
+                                <th>Date of Burial</th>
+                                <th>Date of Birth</th>
+                                <th>Marital status</th>
+                                <th>Age</th>
+                                <th>Epitaph</th>
+                            </tr>
                     	</thead>
                     	<tbody id="table-body">
                     		
@@ -97,20 +107,20 @@
     <!-- Modal for Inserting deceased records -->
     <div id="modal-insert" class="w3-modal">
         <div class="w3-modal-content">
-            <span onclick="document.getElementById('modal-insert').style.display='none'" style="color: white;background-color: rgb(223, 116, 67);" class="w3-button w3-display-topright">&times;</span>
-            <header class="w3-padding" style="background-color: rgb(223, 116, 67);">
-                <h2 style="color:white;">Deceased person</h2>
+            <span onclick="document.getElementById('modal-insert').style.display='none'"  class="w3-button w3-display-topright">&times;</span>
+            <header class="head w3-padding">
+                <h2>Deceased Person</h2>
             </header>
-            <div class="w3-padding w3-row">
+            <div class="isert w3-padding w3-row">
                 <div class="w3-col s3">
-                    <p style="padding-top: 17px;">First name</p>
-                    <p style="padding-top: 17px;">Last name</p>
-                    <p style="padding-top: 17px;">Middle initial</p>
-                    <p style="padding-top: 17px;">Date of burial</p>
-                    <p style="padding-top: 17px;">Date of birth</p>
-                    <p style="padding-top: 17px;">Marital status</p>
-                    <p style="padding-top: 17px;">Age</p>
-                    <p style="padding-top: 17px;">Epitaph</p>
+                    <p>First name</p>
+                    <p>Last name</p>
+                    <p>Middle initial</p>
+                    <p>Date of burial</p>
+                    <p>Date of birth</p>
+                    <p>Marital status</p>
+                    <p>Age</p>
+                    <p>Epitaph</p>
                 </div>
                 <div class="w3-col s9">
                     <input type="text" id="first-name" name="first-name" class="w3-input" required>
@@ -119,7 +129,7 @@
                     <input type="date" id="burial-date" name="burial-date" class="w3-input" required>
                     <input type="date" id="birth-date" name="birth-date" class="w3-input" required>
                     <select class="w3-select" id="marital-status" name="marital-status">
-                      <option value="" disabled selected>Choose your option</option>
+                      <option value="" disabled selected>Choose your status</option>
                       <option value="Married">Married</option>
                       <option value="Widowed">Widowed</option>
                       <option value="Separated">Separated</option>
@@ -129,9 +139,10 @@
                   <input type="number" id="age" name="age" class="w3-input" required>
                   <input type="text" id="epitaph" name="epitaph" class="w3-input" required>
               </div>
+
+              <button class="w3-button w3-right w3-round" onclick="addDeceasedRecords();">Add Person</button>
+
           </div>
-          <div class="w3-container">
-            <button class="w3-button w3-right w3-round" onclick="addDeceasedRecords();"  style="background-color: rgb(223, 116, 67);color: white;">Add +</button>
         </div>
     </div>
 </div>
@@ -140,9 +151,9 @@
 <!-- Modal for Updating deceased records-->
 <div id="modal-update" class="w3-modal">
     <div class="w3-modal-content">
-        <span onclick="document.getElementById('modal-update').style.display='none'" style="color: white;background-color: rgb(223, 116, 67);" class="w3-button w3-display-topright">&times;</span>
-        <header class="w3-padding" style="background-color: rgb(223, 116, 67);">
-            <h2 style="color:white;">Edit Deceased Record</h2>
+        <span onclick="document.getElementById('modal-update').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+        <header class="pad w3-padding">
+            <h2>Edit Deceased Record</h2>
         </header>
         <div class="w3-row w3-padding">
             <div class="w3-col s3">
@@ -174,9 +185,9 @@
               <input type="text" id="upd-epitaph" name="upd-epitaph" class="w3-input" required>
           </div>
       </div>
-      <div class="w3-container w3-padding-24">
-        <button class="w3-button w3-right w3-round" onclick="updateDeceasedRecord()" style="background-color: rgb(223, 116, 67);color: white;">Save</button>
-        <button class="w3-button w3-right w3-round" onclick="deleteDeceasedRecord()" style="margin-right: 30px;background-color: rgb(218, 52, 48);color: white;">Delete</button>
+      <div class="btn-up w3-container w3-padding-24">
+        <button class="bs w3-button w3-right w3-round" onclick="updateDeceasedRecord()">Save</button>
+        <button class="bd w3-button w3-right w3-round" onclick="deleteDeceasedRecord()">Delete</button>
     </div>
 </div>
 </div>
