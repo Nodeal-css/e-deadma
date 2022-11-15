@@ -94,8 +94,8 @@
                     <span class="text" id="logo_cem_name">Dashboard / Cemetery Map</span>
                 </div>
 
-                <button class="w3-button w3-bordered w3-left w3-margin w3-round" onclick="document.getElementById('modal-import-map').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
-				<button class="w3-button w3-bordered w3-left w3-margin w3-round" onclick="checkVacantGrave();" style="background-color: rgb(223, 116, 67);color: white;">Check vacant graves</button>
+                <button class="w3-button w3-left w3-margin-top w3-margin-left" onclick="document.getElementById('modal-import-map').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
+				<button class="w3-button w3-left w3-margin-top" onclick="checkVacantGrave();" style="background-color: rgb(223, 116, 67);color: white;">Check vacant graves</button>
 
                 <!-- Start of the Map -->
                 <div style="width:100%;height:480px;" class="w3-row w3-card-4 w3-container">
@@ -153,7 +153,7 @@
 
 <!-- Start of Modal for opening a grave/block -->
 <div class="w3-modal w3-animate-opacity" id="modal-grave">
-	<div class="w3-modal-content" style="width: 40%;">
+	<div class="w3-modal-content" style="width: 50%;">
 		<span onclick="closeGraveModal();" style="color: white;background-color: rgb(223, 116, 67);" class="w3-button w3-display-topright">&times;</span>
 		<header class="w3-padding" style="background-color: rgb(223, 116, 67);">
 			<h2 style="color: white;">Grave</h2>
@@ -163,10 +163,10 @@
 			<button id="load-Deceased" class="w3-bar-item w3-button" onclick="loadDeceasedModal();" style="color: white;background-color: rgb(223, 116, 67);">Deceased</button>
 			<button id="load-Plot" class="w3-bar-item w3-button" onclick="loadPlotModal();" style="color: white;background-color: rgb(223, 116, 67);">Plot record</button>
 		</div>
-			<div id="modal-deceased-record" class="w3-container w3-border city" style="display:none;">
+			<div id="modal-deceased-record" class="w3-container w3-border city" style="display:none;max-height: 270px;overflow:scroll;">
 				
 			</div>
-			<div id="modal-plot-owner" class ="w3-container w3-border city"  style="display:none;">
+			<div id="modal-plot-owner" class ="w3-container w3-border city"  style="display:none;max-height: 270px;">
 				<!--div class="w3-panel w3-red w3-round-xlarge">
 					
 				</div-->
@@ -174,7 +174,7 @@
 		<!-- End modal Main Content -->
 		<div class="w3-container" id="modal-footer">
 			<input type="text" name="grave-id" id="grave-id">
-			<button onclick="deleteBlock();" class="w3-button w3-right w3-red">Delete</button>
+			<button onclick="deleteBlock();" class="w3-button w3-right w3-margin w3-red w3-round-xxlarge">Remove Grave</button>
 		</div>
 	</div>
 </div>
@@ -535,6 +535,7 @@
 			}
 		});
 	}
+
 	//function to load the deceased records inside the grave
 	// Assign the maximum width of this div element
 	function loadDeceasedModal(){
@@ -557,6 +558,17 @@
 	function loadPlotModal(){
 		document.getElementById('modal-deceased-record').style.display = 'none';
 		document.getElementById('modal-plot-owner').style.display = 'block';
+		var block = $("#grave-id").val();
+		$.ajax({
+			type:'post',
+			url:'includes/populateModalPlot.php',
+			data:{
+				grave_id:block
+			},
+			success:function(result, status){
+				$("#modal-plot-owner").html(result);
+			}
+		});
 		
 	}
 // End of #modal-grave javascript

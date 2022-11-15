@@ -9,15 +9,21 @@ if(isset($_POST['grave_id'])){
     $result = mysqli_query($conn, $sql);
     if(mysqli_num_rows($result) > 0){
         while($row = mysqli_fetch_assoc($result)){
-            $html .= "<div class='w3-panel w3-red w3-round-xlarge'>" .
+            $html .= "<div class='w3-row'>" . 
+                     "<div class='w3-col s3 w3-panel'>
+                     <img src='assets/grave-logo.png' style='width: 100%;height: 100%;margin-top: 20px;'>" .
+                     "</div>" .
+                     "<div class='w3-panel w3-round-xlarge w3-col s9'>" .
                      "<h3>" . $row['name'] . "</h3>" .
-                     "<i>" . $row['epitaph'] . "</i>" .
-                     "<p>DOB: " . $row['birth_date'] . "</p>" .
-                     "<p>DOD: " . $row['burial_date'] . "</p></div>";
+                     "<i style='color: rgb(223, 116, 67);'>" . $row['epitaph'] . "</i>" .
+                     "<p style='color: #636363;'>DOB: " . $row['birth_date'] . ' - DOD:' . $row['burial_date'] . "</p>" .
+                     "</div>
+                        <hr style='border-bottom: 1px solid #8c8b8b;'>
+                     </div>";
         }
-        echo $html;
+        echo $html . '<div class="w3-center"><button class="w3-button w3-margin w3-indigo w3-round-xxlarge">Insert</button></div>';
     }else{
-        echo '<p style="color:green;">This grave is vacant</p>';
+        echo '<h3 style="color:green;">This grave is vacant</h3>';
     }
 }
 exit();
