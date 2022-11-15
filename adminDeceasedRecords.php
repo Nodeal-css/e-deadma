@@ -155,16 +155,16 @@
         <header class="pad w3-padding">
             <h2>Edit Deceased Record</h2>
         </header>
-        <div class="w3-row w3-padding">
+        <div class="isert1 w3-row w3-padding">
             <div class="w3-col s3">
-                <p style="padding-top: 17px;">First name</p>
-                <p style="padding-top: 17px;">Last name</p>
-                <p style="padding-top: 17px;">Middle initial</p>
-                <p style="padding-top: 17px;">Date of burial</p>
-                <p style="padding-top: 17px;">Date of birth</p>
-                <p style="padding-top: 17px;">Marital status</p>
-                <p style="padding-top: 17px;">Age</p>
-                <p style="padding-top: 17px;">Epitaph</p>
+                <p>First name</p>
+                <p>Last name</p>
+                <p>Middle initial</p>
+                <p>Date of burial</p>
+                <p>Date of birth</p>
+                <p>Marital status</p>
+                <p>Age</p>
+                <p>Epitaph</p>
             </div>
             <div class="w3-col s9">
                 <input type="hidden" id="upd-deceased-id" name="upd-deceased-id" class="w3-input" required>
