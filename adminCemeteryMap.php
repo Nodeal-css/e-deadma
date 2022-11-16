@@ -166,10 +166,20 @@
 			<div id="modal-deceased-record" class="w3-container w3-border city" style="display:none;max-height: 270px;overflow:scroll;">
 				
 			</div>
-			<div id="modal-plot-owner" class ="w3-container w3-border city"  style="display:none;max-height: 270px;">
-				<!--div class="w3-panel w3-red w3-round-xlarge">
-					
-				</div-->
+			<div id="modal-plot-owner" class ="w3-container w3-border city"  style="display:none;height: 270px;">
+				
+			</div>
+			<div id="modal-assign-deceased" class="w3-container w3-border city" >
+				<input type="hidden" name='modal-deceased-id' id='modal-deceased-id' readonly>
+				<input type="text" class="w3-input" name='modal-find-deceased' id='modal-find-deceased' placeholder='Search name of the deceased'>
+				<div id="deceased-result" style="position:fixed;background-color: white;"></div>
+				<button onclick="placeDeceasedToGrave();" class="w3-button w3-round-xxlarge w3-right w3-margin" style="color: white;background-color: rgb(223, 116, 67);">Save</button>
+			</div>
+			<div id="modal-assign-plot" class="w3-container w3-border city" style="display:none;height: 270px;">
+				<input type="text" name="modal-plot-id" id="modal-plot-id" readonly>
+				<input type="text" class="w3-input" name="modal-owner-name" id="modal-owner-name" placeholder="Search name of the Plot owner">
+				<div id="plot-result" style="position:fixed;background-color: white;"></div>
+				<button onclick="placePlotToGrave();" class="w3-button w3-round-xxlarge w3-right w3-margin w3-indigo" style="color: white;">Save</button>
 			</div>
 		<!-- End modal Main Content -->
 		<div class="w3-container" id="modal-footer">
@@ -187,6 +197,8 @@
 	$(document).ready(function() {
 		checkSession();
        	getSession();
+		findDeceasedModal();
+		findOwnerModal();
 
 		displayImgMap();
 		deleteCacheImages();
@@ -476,6 +488,7 @@
 		document.getElementById('modal-deceased-record').style.display = 'none';
 		document.getElementById('modal-plot-owner').style.display = 'none';
 		$("#grave-id").val('');
+		$("#modal-deceased-id").val('');
 	}
 
 	//Function to search a specific grave and load new element inside #map-display 
@@ -536,11 +549,15 @@
 		});
 	}
 
+	//START OF MODAL JAVASCRIPT ----------------------------
 	//function to load the deceased records inside the grave
 	// Assign the maximum width of this div element
 	function loadDeceasedModal(){
 		document.getElementById('modal-deceased-record').style.display = 'block';
 		document.getElementById('modal-plot-owner').style.display = 'none';
+		document.getElementById('modal-assign-deceased').style.display = 'none';
+		document.getElementById('modal-assign-plot').style.display = 'none';
+
 		var block = $("#grave-id").val();
 		$.ajax({
 			type:'post',
@@ -558,6 +575,9 @@
 	function loadPlotModal(){
 		document.getElementById('modal-deceased-record').style.display = 'none';
 		document.getElementById('modal-plot-owner').style.display = 'block';
+		document.getElementById('modal-assign-deceased').style.display = 'none';
+		document.getElementById('modal-assign-plot').style.display = 'none';
+
 		var block = $("#grave-id").val();
 		$.ajax({
 			type:'post',
@@ -571,6 +591,133 @@
 		});
 		
 	}
+
+	//function to load the dropdown element of finding the deceased for #modal-assign-deceased
+	function findDeceasedModal(){
+		$("#modal-find-deceased").keyup(function() {
+			$("#deceased-result").show();
+				var name = $("#modal-find-deceased").val();
+				console.log("name: " + name);
+				if(name != ""){
+					$.ajax({
+						type:'post',
+						url:'includes/functionFindDeceased_Plot.php',
+						data:{
+							deceased:name
+						},
+						success:function(result, status){
+							$("#deceased-result").html(result);
+						}
+					});
+				}else{
+					$("#deceased-result").html('');
+				}
+		});
+		
+	}
+	// Assign the deceased_id to the hidden input field
+	function getDeceasedId(name, id){
+		$("#modal-deceased-id").val(id);
+		$("#modal-find-deceased").val(name);
+		$("#deceased-result").hide();
+	}
+
+	//Function to show the dropdown element when searching for the owner's name
+	function findOwnerModal(){
+		$("#modal-owner-name").keyup(function() {
+			$("#plot-result").show();
+			var name = $("#modal-owner-name").val();
+			console.log("owner: " + name);
+			if(name != ""){
+				$.ajax({
+					type:'post',
+					url:'includes/functionFindDeceased_Plot.php',
+					data:{
+						owner:name
+					},
+					success:function(result, status){
+						$("#plot-result").html(result);
+					}
+				});
+			}else{
+				$("#plot-result").html('');
+			}
+		});
+	}
+	//Assign the plot_id to the input field
+	function getPlotId(data, id){
+		$("#modal-plot-id").val(id);
+		$("#modal-owner-name").val(data);
+		$("#plot-result").hide();
+	}
+
+	//function to load the #modal-assign-deceased
+	function loadAssignDeceased(){
+		document.getElementById('modal-deceased-record').style.display = 'none';
+		document.getElementById('modal-plot-owner').style.display = 'none';
+		document.getElementById('modal-assign-deceased').style.display = 'block';
+		document.getElementById('modal-assign-plot').style.display = 'none';
+		$("#modal-deceased-id").val('');
+		$("#modal-find-deceased").val('');
+		$("#deceased-result").hide();
+	}
+	//function to load the #modal-assign-plot
+	function loadAssignPlot(){
+		document.getElementById('modal-deceased-record').style.display = 'none';
+		document.getElementById('modal-plot-owner').style.display = 'none';
+		document.getElementById('modal-assign-deceased').style.display = 'none';
+		document.getElementById('modal-assign-plot').style.display = 'block';
+		$("#modal-plot-id").val('');
+		$("#modal-owner-name").val('');
+		$("#plot-result").hide();
+	}
+
+	//function to update the grave_id of deceased record
+	function placeDeceasedToGrave(){
+		var block = $("#grave-id").val();
+		var id = $("#modal-deceased-id").val();
+		if(id != ""){
+			$.ajax({
+				type:'post',
+				url:'includes/functionUpdateDeceasedGrave.php',
+				data:{
+					grave:block,
+					deceased:id
+				},
+				success:function(result, status){
+					alert(result);
+					loadDeceasedModal();
+				}
+			});
+		}else{
+			alert('Please click the deceased name');
+		}
+	}
+
+	//function to update the grave_id of plot_ownership record
+	//in the next session re-evaluate if we want to delete the current
+	//plot record to this modal or just update it
+	function placePlotToGrave(){
+		var block = $("#grave-id").val();
+		var plot_id = $("#modal-plot-id").val();
+		if(plot_id != ""){
+			$.ajax({
+				type:'post',
+				url:'includes/functionUpdateDeceasedGrave.php',
+				data:{
+					block_id:block,
+					plot:plot_id
+				},
+				success:function(result, status){
+					alert(result);
+					loadPlotModal();
+				}
+			});
+		}else{
+			alert('Please click the Plot ownership drop down');
+		}
+	}
+
 // End of #modal-grave javascript
 </script>
 <!-- Javascript Ends -->

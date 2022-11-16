@@ -31,7 +31,7 @@ if(isset($_POST['grave_id'])){
     }else{
         $html = "<h3 class='w3-margin'>No record of plot ownership for this grave</h3>";
     }
-    echo $html . '<div class="w3-center"><button class="w3-button w3-margin w3-indigo w3-round-xxlarge">Edit</button></div>';
+    echo $html . '<div class="w3-center"><button onclick="loadAssignPlot();" class="w3-button w3-margin w3-indigo w3-round-xxlarge">Edit</button></div>';
 }
 exit();
 ?>

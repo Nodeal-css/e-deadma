@@ -21,9 +21,9 @@ if(isset($_POST['grave_id'])){
                         <hr style='border-bottom: 1px solid #8c8b8b;'>
                      </div>";
         }
-        echo $html . '<div class="w3-center"><button class="w3-button w3-margin w3-indigo w3-round-xxlarge">Insert</button></div>';
+        echo $html . '<div class="w3-center"><button onclick="loadAssignDeceased();" class="w3-button w3-margin w3-indigo w3-round-xxlarge">Insert</button></div>';
     }else{
-        echo '<h3 style="color:green;">This grave is vacant</h3>';
+        echo '<h3 style="color:green;">This grave is vacant</h3><div class="w3-center"><button onclick="loadAssignDeceased();" class="w3-button w3-margin w3-indigo w3-round-xxlarge">Insert</button></div>';
     }
 }
 exit();

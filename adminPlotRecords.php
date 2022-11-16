@@ -104,7 +104,7 @@
 		<div class="w3-row w3-padding">
 			<div class="w3-col s5 w3-left" id="plot-info">
 				<label class="w3-left">Owner </label><button class="w3-right" id="btn-display-owner">Add new owner</button>
-                <input type="hidden" name="owner-id" id="owner-id">
+                <input type="text" name="owner-id" id="owner-id">
 				<input type="text" class="w3-input" name="owner-find" id="owner-find" autocomplete="off" placeholder="Choose from the dropdown">
 				<div id="back-result-owner" style="position:fixed;background-color: white;"></div>
 				<label>Date of purchase</label>
@@ -415,6 +415,7 @@
     $("#btn-display-owner").show();
     flag = false;
     console.log("flag: " + flag);
+    clearInputFields();
   }
 
   //function to clear all the input fields of the modal
