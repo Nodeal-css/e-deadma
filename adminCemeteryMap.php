@@ -169,11 +169,14 @@
 			<div id="modal-plot-owner" class ="w3-container w3-border city"  style="display:none;height: 270px;">
 				
 			</div>
-			<div id="modal-assign-deceased" class="w3-container w3-border city" >
+			<div id="modal-assign-deceased" class="w3-container w3-border city" style="display:none;height: 270px;">
 				<input type="hidden" name='modal-deceased-id' id='modal-deceased-id' readonly>
 				<input type="text" class="w3-input" name='modal-find-deceased' id='modal-find-deceased' placeholder='Search name of the deceased'>
 				<div id="deceased-result" style="position:fixed;background-color: white;"></div>
 				<button onclick="placeDeceasedToGrave();" class="w3-button w3-round-xxlarge w3-right w3-margin" style="color: white;background-color: rgb(223, 116, 67);">Save</button>
+				<div>	
+					<p class="w3-center" style="margin-top: 60px; margin-left: 90px;cursor: pointer;" onclick="redirectDeceasedPage();">Deceased record not found?</p>
+				</div>
 			</div>
 			<div id="modal-assign-plot" class="w3-container w3-border city" style="display:none;height: 270px;">
 				<input type="text" name="modal-plot-id" id="modal-plot-id" readonly>
@@ -696,7 +699,7 @@
 
 	//function to update the grave_id of plot_ownership record
 	//in the next session re-evaluate if we want to delete the current
-	//plot record to this modal or just update it
+	//plot record to this modal or just update it | Create event instead
 	function placePlotToGrave(){
 		var block = $("#grave-id").val();
 		var plot_id = $("#modal-plot-id").val();
@@ -716,6 +719,12 @@
 		}else{
 			alert('Please click the Plot ownership drop down');
 		}
+	}
+
+	//Redirect to deceased records page to add a new record
+	function redirectDeceasedPage(){
+		var request = 'addrecord';
+		window.location.href = 'adminDeceasedRecords.php?request=' + request;
 	}
 
 // End of #modal-grave javascript

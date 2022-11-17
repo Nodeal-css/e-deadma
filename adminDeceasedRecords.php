@@ -79,7 +79,7 @@
                     <span class="text" id="logo_cem_name">Dashboard</span>
                 </div>
 
-                <button class="w3-button w3-bordered w3-right w3-margin-bottom w3-round" onclick="document.getElementById('modal-insert').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Add</button>
+                <button class="w3-button w3-bordered w3-right w3-margin-bottom w3-round" onclick="modalInsertDeceased();" style="background-color: rgb(223, 116, 67);color: white;">Add</button>
                 <div>
                     <table class="w3-table">
                     	<thead>
@@ -97,7 +97,7 @@
     <!-- Modal for Inserting deceased records -->
     <div id="modal-insert" class="w3-modal">
         <div class="w3-modal-content">
-            <span onclick="document.getElementById('modal-insert').style.display='none'" style="color: white;background-color: rgb(223, 116, 67);" class="w3-button w3-display-topright">&times;</span>
+            <span id="close-modal-insert" onclick="document.getElementById('modal-insert').style.display='none'" style="color: white;background-color: rgb(223, 116, 67);" class="w3-button w3-display-topright">&times;</span>
             <header class="w3-padding" style="background-color: rgb(223, 116, 67);">
                 <h2 style="color:white;">Deceased person</h2>
             </header>
@@ -131,7 +131,7 @@
               </div>
           </div>
           <div class="w3-container">
-            <button class="w3-button w3-right w3-round" onclick="addDeceasedRecords();"  style="background-color: rgb(223, 116, 67);color: white;">Add +</button>
+            <button class="w3-button w3-right w3-round" id="btn-insert-deceased" onclick="addDeceasedRecords();" style="background-color: rgb(223, 116, 67);color: white;">Add +</button>
         </div>
     </div>
 </div>
@@ -189,7 +189,44 @@
        checkSession();
        getSession();
        getDeceasedRecords();
-   });
+
+       checkOpenInsertModal();
+    });
+
+  //Open modal for inserting a deceased Record
+  function modalInsertDeceased(){
+    document.getElementById('modal-insert').style.display='block';
+  }
+
+  //check if opening this page will also open the modal for inserting record
+  //receive the grave_id to this method
+  function checkOpenInsertModal(){
+    var urlstr = window.location.search;
+        if(urlstr != null){
+            var req = new URLSearchParams(urlstr);
+            if(req.get('request') == 'addrecord'){
+                console.log("search: " + req.get('request'));
+                //Load Modal for adding
+                modalInsertDeceased();
+                $("#btn-insert-deceased").on('click', function(){
+                    var fname = $("#first-name").val();
+                    var lname = $("#last-name").val();
+                    var mi = $("#middle-initial").val();
+                    var burialdate = $("#burial-date").val();
+                    var birthdate = $("#birth-date").val();
+                    var marital = $("#marital-status").val();
+                    var age = $("#age").val();
+                    var epitaph = $("#epitaph").val();
+                    if(fname != "" && lname != "" && mi != "" && burialdate != "" && birthdate != "" && marital != "" && age != "" && epitaph != ""){
+                        window.location.href = "adminCemeteryMap.php";
+                    }
+                });
+                $("#close-modal-insert").on('click', function(){
+                    window.location.href = "adminCemeteryMap.php";
+                });
+            }
+        }
+  }
   
   // this function checks for session, will automatically load with the document
   function checkSession(){
