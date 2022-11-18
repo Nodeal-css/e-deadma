@@ -97,14 +97,14 @@
 <!-- Modal for adding Plot records-->
 <div class="w3-modal" id="modal-plot-record">
 	<div class="w3-modal-content">
-		<span onclick="closeModal();" style="background-color: rgb(223, 116, 67);color:white;" class="w3-button w3-display-topright">&times;</span>
+		<span id="modal-plot-record-close" onclick="closeModal();" style="background-color: rgb(223, 116, 67);color:white;" class="w3-button w3-display-topright">&times;</span>
 		<header class="w3-padding" style="background-color: rgb(223, 116, 67);">
 			<h2 style="color:white;">Add Plot Record</h2>
 		</header>
 		<div class="w3-row w3-padding">
 			<div class="w3-col s5 w3-left" id="plot-info">
 				<label class="w3-left">Owner </label><button class="w3-right" id="btn-display-owner">Add new owner</button>
-                <input type="text" name="owner-id" id="owner-id">
+                <input type="hidden" name="owner-id" id="owner-id">
 				<input type="text" class="w3-input" name="owner-find" id="owner-find" autocomplete="off" placeholder="Choose from the dropdown">
 				<div id="back-result-owner" style="position:fixed;background-color: white;"></div>
 				<label>Date of purchase</label>
@@ -134,7 +134,7 @@
 			</div>
 		</div>
 		<div class="w3-container">
-			<button class="w3-button w3-round w3-right" style="background-color: rgb(223, 116, 67);color: white;" onclick="addPlotRecord();">Save</button>
+			<button id="modal-submit-plot" class="w3-button w3-round w3-right" style="background-color: rgb(223, 116, 67);color: white;" onclick="addPlotRecord();">Save</button>
 		</div>
 	</div>
 </div>
@@ -208,7 +208,60 @@
 
    		console.log("flag: " + flag);
    		$("#owner-info").hide();
+
+        checkOpenInsertModal();
   	});
+
+    //Check if opening this page will also open the modal for inserting plot records
+    function checkOpenInsertModal(){
+        var urlstr = window.location.search;
+        if(urlstr != null){
+            var req = new URLSearchParams(urlstr);
+            var grave = req.get('graveid');
+            if(req.get('request') == 'addplot' && grave != null){
+                console.log("request: " + req.get('request'));
+                console.log("grave: " + grave);
+
+                document.getElementById('modal-plot-record').style.display='block';
+                $("#modal-plot-record-close").on('click', function(){
+                    window.location.href = "adminCemeteryMap.php?request=" + "plot" + "&grave-id=" + grave;
+                });
+                $("#modal-submit-plot").on('click', function(){
+                    if(notNullFieldsMode1() || notNullFieldsMode2()){
+                        alert('Added a new burial record. Returning to cemetery map');
+                        window.location.href = "adminCemeteryMap.php?request=" + "plot" + "&grave-id=" + grave;
+                    }
+                });
+            }
+        }
+    }
+
+    //function that will check if AddPlotRecordMode1 is not null
+    function notNullFieldsMode1(){
+        var id = $("#owner-id").val();
+        var owner = $("#owner-find").val();
+        var date_purchase = $("#date-purchase").val();
+        var purchase_price = $("#purchase-price").val();
+        var sqr = $("#sqr-meters").val();
+        return (id != "" && owner != "" && date_purchase != "" && purchase_price != "" && sqr != "");
+    }
+
+    //function that will check if AddPlotRecordMode2 is not null
+    function notNullFieldsMode2(){
+        var date_purchase = $("#date-purchase").val();
+        var purchase_price = $("#purchase-price").val();
+        var sqr = $("#sqr-meters").val();
+
+        var fname = $("#owner-fname").val();
+        var lname = $("#owner-lname").val();
+        var mi = $("#owner-mi").val();
+        var street = $("#owner-street").val();
+        var city = $("#owner-city").val();
+        var zip = $("#owner-zip").val();
+        var phone = $("#owner-phone").val();
+        var email = $("#owner-email").val();
+        return (fname != "" && lname != "" && mi != "" && street != "" && city != "" && zip != "" && phone != "" && email != "" && date_purchase != "" && purchase_price != "" && sqr != "");
+    }
 
 	//when button is clicked, the owner fill up form will display
   	$("#btn-display-owner").click(function(){
@@ -348,7 +401,7 @@
 
   //function for adding non existing owner for plot_ownership table
   function addPlotRecord2(fname, lname, mi, street, city, zip, phone, email, date_purchase, purchase_price, sqr){
-    if(fname != "" && lname != "" && mi != "" && street != "" && city != "" && zip != "" && phone != "" && email != "" && date_purchase != "" && purchase_price != "" && sqr != ""){
+    if(notNullFieldsMode2()){
         $.ajax({
             url:'includes/functionAddPlotRecordMode2.php',
             type:'post',
@@ -382,7 +435,7 @@
 
   //function for adding existing owner for plot_ownership table
   function addPlotRecord1(id, owner, date_purchase, purchase_price, sqr){
-    if(id != "" && owner != "" && date_purchase != "" && purchase_price != "" && sqr != ""){
+    if(notNullFieldsMode1()){
         $.ajax({
             url:'includes/functionAddPlotRecordMode1.php',
             type:'post',

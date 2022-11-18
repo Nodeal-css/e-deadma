@@ -205,7 +205,10 @@
         if(urlstr != null){
             var req = new URLSearchParams(urlstr);
             if(req.get('request') == 'addrecord'){
+                var grave_id = req.get('grave');
                 console.log("search: " + req.get('request'));
+                console.log("grave-id: " + grave_id);
+                
                 //Load Modal for adding
                 modalInsertDeceased();
                 $("#btn-insert-deceased").on('click', function(){
@@ -218,11 +221,12 @@
                     var age = $("#age").val();
                     var epitaph = $("#epitaph").val();
                     if(fname != "" && lname != "" && mi != "" && burialdate != "" && birthdate != "" && marital != "" && age != "" && epitaph != ""){
-                        window.location.href = "adminCemeteryMap.php";
+                        alert('Added a deceased record. Returning to cemetery map.');
+                        window.location.href = "adminCemeteryMap.php?request=" + "deceased" + "&graveid=" + grave_id;
                     }
                 });
                 $("#close-modal-insert").on('click', function(){
-                    window.location.href = "adminCemeteryMap.php";
+                    window.location.href = "adminCemeteryMap.php?request=" + "deceased" + "&graveid=" + grave_id;
                 });
             }
         }

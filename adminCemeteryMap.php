@@ -183,6 +183,9 @@
 				<input type="text" class="w3-input" name="modal-owner-name" id="modal-owner-name" placeholder="Search name of the Plot owner">
 				<div id="plot-result" style="position:fixed;background-color: white;"></div>
 				<button onclick="placePlotToGrave();" class="w3-button w3-round-xxlarge w3-right w3-margin w3-indigo" style="color: white;">Save</button>
+				<div>
+					<p class="w3-center" style="margin-top: 60px; margin-left: 90px;cursor: pointer;" onclick="redirectPlotPage();">Burial record not found?</p>
+				</div>
 			</div>
 		<!-- End modal Main Content -->
 		<div class="w3-container" id="modal-footer">
@@ -206,7 +209,29 @@
 		displayImgMap();
 		deleteCacheImages();
 		getAllCoordinates();
+
+		checkOpenGrave();
 	});
+
+	//this function will check if opening this page is from adding deceased records
+	function checkOpenGrave(){
+		var urlstr = window.location.search;
+		if(urlstr != null){
+			var req = new URLSearchParams(urlstr);
+			var grave_id = req.get('graveid');
+			if(grave_id != null && req.get('request') == 'deceased'){
+				console.log("grave id: " + grave_id);
+				console.log("request: " + req.get('request'));
+				openGraveModal(grave_id);
+				loadAssignDeceased();
+			}else if(req.get('grave-id') != null && req.get('request') == 'plot'){
+				console.log("grave id: " + req.get('grave-id'));
+				console.log("request: " + req.get('request'));
+				openGraveModal(req.get('grave-id'));
+				loadAssignPlot();
+			}
+		}
+	}
 
 	//Function to display all the graves using mapster framework |
 	//Note: error will occur when image is not yet loaded. So this method is called inside #map-pic onload
@@ -724,7 +749,15 @@
 	//Redirect to deceased records page to add a new record
 	function redirectDeceasedPage(){
 		var request = 'addrecord';
-		window.location.href = 'adminDeceasedRecords.php?request=' + request;
+		var grave_id = $("#grave-id").val();
+		window.location.href = 'adminDeceasedRecords.php?request=' + request + "&grave=" + grave_id;
+	}
+
+	//Redirect to plot records page to add new record
+	function redirectPlotPage(){
+		var request = 'addplot';
+		var grave_id = $("#grave-id").val();
+		window.location.href = 'adminPlotRecords.php?request=' + request + '&graveid=' + grave_id;
 	}
 
 // End of #modal-grave javascript
