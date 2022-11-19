@@ -66,8 +66,8 @@
             <i class="uil uil-bars sidebar-toggle"></i>
 
             <div class="search-box">
-                <input type="text" placeholder="Search by name" id="search-deceased">
-                <i class="uil uil-search" style="margin-left: 240px;" onclick="searchDeceasedRecords();"></i>
+                <input type="text" placeholder="Search by name" id="search-plot-owner">
+                <i class="uil uil-search" style="margin-left: 240px;" onclick="searchPlotOwner();"></i>
             </div>
             <div>
                 <p id="active-user" style="float:left;margin-top: 20px;margin-right: 10px;"></p>
@@ -82,8 +82,10 @@
                     <span class="text" id="logo_cem_name"></span>
                 </div>
 
-                <button class="w3-button w3-bordered w3-right w3-margin-bottom w3-round" onclick="document.getElementById('modal-plot-record').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Add +</button>
-
+                <div class="w3-bar w3-margin">
+                    <button class="w3-button w3-left w3-bar-item" onclick="document.getElementById('modal-plot-record').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Add +</button>
+                    <button class="w3-button w3-left w3-bar-item" onclick="noAllocatedGrave();" style="background-color: rgb(223, 116, 67);color: white;">No Grave</button>
+                </div>
                 <!-- Main content -->
                 <div id="grid-view">
                     
@@ -155,8 +157,8 @@
                     <tr><td class="w3-right">Price: </td><td><input type="text" class="w3-input" name="vw-price" id="vw-price" style="width:80%;"></td></tr>
                     <tr><td class="w3-right">Status: </td><td><input type="text" class="w3-input" name="vw-status" id="vw-status" style="width:80%;"></td></tr>
                     <tr><td class="w3-right">Square meters: </td><td><input type="text" class="w3-input" name="vw-sqr-meters" id="vw-sqr-meters" style="width:80%;"></td></tr>
-                    <tr><td>plot: </td><td><input type="text" class="w3-input" name="vw-plot-id" id="vw-plot-id" style="width:80%;"></td></tr>
-                    <tr><td>grave id: </td><td><input type="text" class="w3-input" name="vw-grave-id" id="vw-grave-id" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">plot: </td><td><input type="text" class="w3-input" name="vw-plot-id" id="vw-plot-id" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">grave id: </td><td><input type="text" class="w3-input" name="vw-grave-id" id="vw-grave-id" style="width:80%;"></td></tr>
                 </table>
                 <div class="w3-container w3-center w3-round-xlarge" style="width: 100%;min-height: 190px;background-color: royalblue;">
                     <h4>Cemetery deed...</h4>
@@ -188,7 +190,7 @@
             </div>
         </div>
         <div class="w3-container">
-            <button class="w3-button w3-round w3-right" style="background-color: rgb(223, 116, 67);color: white;" onclick="">Locate</button>
+            <button class="w3-button w3-round w3-right" style="background-color: rgb(223, 116, 67);color: white;" onclick="locateCemeteryMap();">Locate</button>
         </div>
     </div>
 </div>
@@ -618,6 +620,47 @@
             console.log(data);
         }
     });
+  }
+
+  //Search a specific burial record using the name of the plot owner
+  function searchPlotOwner(){
+    var name = $("#search-plot-owner").val();
+    $.ajax({
+        type:'post',
+        url:'includes/functionSearchPlotOwnership.php',
+        data:{
+            owner:name
+        },
+        success:function(result, status){
+            $("#grid-view").html(result);
+        }
+    });
+  }
+
+  //Function to filter out what plot are not allocated to the cemetery map
+  function noAllocatedGrave(){
+    var request = 'nograve';
+    $.ajax({
+        type:'post',
+        url:'includes/functionSearchPlotOwnership.php',
+        data:{
+            noGrave:request
+        },
+        success:function(result, status){
+            alert('The highlighted plots do not have graves');
+            $("#grid-view").html(result);
+        }
+    });
+  }
+
+  //Method to open the cemetery map of a specific plot record
+  function locateCemeteryMap(){
+    var grave = $("#vw-grave-id").val();
+    if(grave != ""){
+        window.location.href = "adminCemeteryMap.php?request=" + "locate" + "&grave_id=" + grave;
+    }else{
+        alert('This plot record has not been allocated to the cemetery map.\nPlease assign this record first to the map');
+    }
   }
 
 </script>

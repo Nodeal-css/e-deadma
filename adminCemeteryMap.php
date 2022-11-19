@@ -94,11 +94,16 @@
                     <span class="text" id="logo_cem_name">Dashboard / Cemetery Map</span>
                 </div>
 
-                <button class="w3-button w3-left w3-margin-top w3-margin-left" onclick="document.getElementById('modal-import-map').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
-				<button class="w3-button w3-left w3-margin-top" onclick="checkVacantGrave();" style="background-color: rgb(223, 116, 67);color: white;">Check vacant graves</button>
+				
 
                 <!-- Start of the Map -->
                 <div style="width:100%;height:480px;" class="w3-row w3-card-4 w3-container">
+					<div class='w3-bar' style="width: 800px;">
+						<button class="w3-button w3-left w3-margin-top w3-animate-bottom" onclick="document.getElementById('modal-import-map').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
+						<button class="w3-button w3-left w3-margin-top w3-animate-bottom" onclick="checkVacantGrave();" style="background-color: rgb(223, 116, 67);color: white;">Check vacant graves</button>
+						<button class="w3-button w3-right w3-margin-top w3-animate-bottom">+</button>
+						<button class="w3-button w3-right w3-margin-top w3-animate-bottom">-</button>
+					</div>
                     <div class="w3-col s9" style="width:800px;margin-right:20px;height:400px;overflow:scroll;">
                     	<div id="workspace">
                     		<img src="" usemap="#map" id="map-pic" onclick="clickOnImage();">
@@ -229,6 +234,11 @@
 				console.log("request: " + req.get('request'));
 				openGraveModal(req.get('grave-id'));
 				loadAssignPlot();
+			}else if(req.get('request') == 'locate' && req.get('grave_id') != null){
+				$("#search-grave").val(req.get('grave_id'));
+				$("#map-pic").ready(function() {
+					searchGrave();
+				});
 			}
 		}
 	}
