@@ -11,7 +11,7 @@ if(isset($_POST['request'])){
     if(mysqli_num_rows($result) > 0){
         $row = mysqli_fetch_assoc($result);
         $arr = $row['cemetery_map_img'];
-        echo '' . $arr;
+        echo $arr;
     }
 }
 

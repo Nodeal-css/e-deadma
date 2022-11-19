@@ -78,8 +78,9 @@
             <i class="uil uil-bars sidebar-toggle"></i>
 
             <div class="search-box">
-                <input type="text" placeholder="Search by name" id="search-grave">
-                <i class="uil uil-search" style="margin-left: 240px;" onclick="searchGrave();"></i>
+                <input type="hidden" placeholder="Search by id" id="search-grave">
+				<input type="text" placeholder="Search by name" id="search-name">
+                <i class="uil uil-search" style="margin-left: 240px;" onclick="searchGraveName();"></i>
             </div>
             <div>
                 <p id="active-user" style="float:left;margin-top: 20px;margin-right: 10px;"></p>
@@ -99,10 +100,11 @@
                 <!-- Start of the Map -->
                 <div style="width:100%;height:480px;" class="w3-row w3-card-4 w3-container">
 					<div class='w3-bar' style="width: 800px;">
-						<button class="w3-button w3-left w3-margin-top w3-animate-bottom" onclick="document.getElementById('modal-import-map').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
-						<button class="w3-button w3-left w3-margin-top w3-animate-bottom" onclick="checkVacantGrave();" style="background-color: rgb(223, 116, 67);color: white;">Check vacant graves</button>
-						<button class="w3-button w3-right w3-margin-top w3-animate-bottom">+</button>
-						<button class="w3-button w3-right w3-margin-top w3-animate-bottom">-</button>
+						<button class="w3-button w3-bar-item w3-left w3-margin-top w3-animate-bottom" onclick="document.getElementById('modal-import-map').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
+						<button class="w3-button w3-bar-item w3-left w3-margin-top w3-animate-bottom" onclick="checkVacantGrave();" style="background-color: rgb(223, 116, 67);color: white;">Check vacant graves</button>
+						<button class="w3-button w3-bar-item w3-left w3-margin-top w3-animate-bottom" onclick="location.reload();" style="background-color: rgb(223, 116, 67);color: white;">Reload Map</button>
+						<button class="w3-button w3-bar-item w3-right w3-margin-top w3-animate-bottom" onclick="zoomIn();">+</button>
+						<button class="w3-button w3-bar-item w3-right w3-margin-top w3-animate-bottom" onclick="zoomOut();">-</button>
 					</div>
                     <div class="w3-col s9" style="width:800px;margin-right:20px;height:400px;overflow:scroll;">
                     	<div id="workspace">
@@ -214,10 +216,18 @@
 		displayImgMap();
 		deleteCacheImages();
 		getAllCoordinates();
+		getWidthHeight();
 
-		checkOpenGrave();
+		
 	});
-
+	window.setTimeout(checkOpenGrave(), 9000);
+	//Onload of image
+	$("#map-pic").on('load', function() {
+		getWidthHeight();
+	});
+	
+	//check if the loadGraves is running
+	var flag = false;
 	//this function will check if opening this page is from adding deceased records
 	function checkOpenGrave(){
 		var urlstr = window.location.search;
@@ -229,15 +239,25 @@
 				console.log("request: " + req.get('request'));
 				openGraveModal(grave_id);
 				loadAssignDeceased();
-			}else if(req.get('grave-id') != null && req.get('request') == 'plot'){
+			}
+			if(req.get('grave-id') != null && req.get('request') == 'plot'){
 				console.log("grave id: " + req.get('grave-id'));
 				console.log("request: " + req.get('request'));
 				openGraveModal(req.get('grave-id'));
 				loadAssignPlot();
-			}else if(req.get('request') == 'locate' && req.get('grave_id') != null){
+			}
+			if(req.get('request') == 'locate' && req.get('grave_id') != null){
 				$("#search-grave").val(req.get('grave_id'));
-				$("#map-pic").ready(function() {
+				$("#map-pic").on('load', function() {
 					searchGrave();
+					console.log("from deceased record: " + req.get('grave_id'));
+				});
+			}
+			if(req.get('request') == 'Plot-locate' && req.get('grave') != null){
+				$("#search-grave").val(req.get('grave'));
+				$("#map-pic").on('load', function() {
+					searchGrave();
+					console.log("from plot record: " + req.get('grave'));
 				});
 			}
 		}
@@ -246,48 +266,50 @@
 	//Function to display all the graves using mapster framework |
 	//Note: error will occur when image is not yet loaded. So this method is called inside #map-pic onload
 	function loadGraves(){
-		if($('#map-pic').attr('src') != ""){
-			$('#map-pic').mapster({
-				areas: [
-					{
-						key: 'grave',
-						fillColor: 'ffffff',
-						staticState: true,
-						stroke: true,
-						strokeColor: '063970',
-						strokeWidth: '3'
-					},
-					{
-						key: 'search-grave',
-						fillColor: 'ffffff',
-						staticState: true,
-						stroke: true,
-						strokeColor: 'fcba03',
-						strokeWidth: '3'
-					},
-					{
-						key: 'vacant',
-						fillColor: 'ffffff',
-						staticState: true,
-						stroke: true,
-						strokeColor: '078200',
-						strokeWidth: '3'
-					},
-					{
-						key: 'occupied',
-						fillColor: 'ffffff',
-						staticState: true,
-						stroke: true,
-						strokeColor: 'fc2003',
-						strokeWidth: '3'
-					}
-				],
-				mapKey: 'state'
-			});
-		}else{
-			alert('not finished, reloading the page');
-			window.location.href ="adminCemeteryMap.php";
-		}
+			if($('#map-pic').attr('src') != ""){
+				flag = true;
+				$('#map-pic').mapster({
+					areas: [
+						{
+							key: 'grave',
+							fillColor: 'ffffff',
+							staticState: true,
+							stroke: true,
+							strokeColor: '063970',
+							strokeWidth: '3'
+						},
+						{
+							key: 'search-grave',
+							fillColor: 'ffffff',
+							staticState: true,
+							stroke: true,
+							strokeColor: 'fcba03',
+							strokeWidth: '3'
+						},
+						{
+							key: 'vacant',
+							fillColor: 'ffffff',
+							staticState: true,
+							stroke: true,
+							strokeColor: '078200',
+							strokeWidth: '3'
+						},
+						{
+							key: 'occupied',
+							fillColor: 'ffffff',
+							staticState: true,
+							stroke: true,
+							strokeColor: 'fc2003',
+							strokeWidth: '3'
+						}
+					],
+					mapKey: 'state'
+				});
+			}else{
+				alert('not finished, reloading the page');
+				//window.location.href ="adminCemeteryMap.php";
+				location.reload();
+			}
 	}
 
 	// this function checks for session, will automatically load with the document
@@ -347,13 +369,12 @@
   	}
 
   	//get the width and height of the map to assign in the #workspace
-  	function getWidthHeight(){
-  		var w = $("#map-pic").width();
+  	function getWidthHeight(){	
+		var w = $("#map-pic").width();
   		var h = $("#map-pic").height();
-
-  		$("#workspace").width(w).height(h);
-		console.log("width: " + $("#workspace").width());
-  		console.log("height: " + $("#workspace").height());
+		$("#workspace").width(w).height(h);
+		console.log("width: " + w);
+  		console.log("height: " + h);
   	}
 
   	//Event listener to track the coordinates on moving the mouse inside the image
@@ -370,7 +391,7 @@
 		e.preventDefault();
 		var form = document.getElementById('upload-image-map');
 		var fdata = new FormData(form);
-
+		
 		$.ajax({
 			type:'post',
 			url:'includes/uploadMap.php',
@@ -380,38 +401,31 @@
 			processData: false,
 			success:function(data, status){
 				alert(data);
-				$("#upload-map").val(null);
-				document.getElementById('modal-import-map').style.display = 'none';
-				//Display the new image of the map
-				displayImgMap();
+				location.reload();
 			}
 		});
 	});
 
 	//Function to display the image map on #map-pic. NOTE: include the function after uploading and loading the page.
 	// Fix the workspace width and height
+
 	function displayImgMap(){
 	var req = 'request';
 		$.ajax({
 			type:'post',
 			url:'includes/functionLoadMap.php',
-			async: true,
+			async:true,
 			data:{
 				request:req
 			},
 			success:function(result, status){
-				$("#map-pic").attr("src", result.substring(20));
-				
-				console.log("output: " + $("#map-pic").attr("src"));
+				//$("#map-pic").attr("src", result.substring(20));
+				document.getElementById('map-pic').src = result.substring(20);
+				console.log("output: " + result.substring(20));
 				console.log("status: " + status);
 			}
 		});
 	}
-	//Onload of image
-	$("#map-pic").ready(function() {
-		getWidthHeight();
-		
-	});
 
 	//Method to delete images that are not found in the database
 	function deleteCacheImages(){
@@ -544,7 +558,7 @@
 			success:function(result, status){
 				$("#map-display").html(result);
 				loadGraves();
-
+				//focus(grave_id);
 				$("#search-grave").val('');
 			}
 		});
@@ -768,6 +782,76 @@
 		var request = 'addplot';
 		var grave_id = $("#grave-id").val();
 		window.location.href = 'adminPlotRecords.php?request=' + request + '&graveid=' + grave_id;
+	}
+
+	var zoomlvl = 1; 
+	var container = document.getElementById('workspace');
+	//Workspace zoom in
+	function zoomIn(){
+		if(zoomlvl < 1.9){
+			zoomlvl += 0.1;
+			container.style.transition = 'transform 1.0s';
+			container.style.transform = `scale(${zoomlvl})`;
+		}
+	}
+	//Workspace zoom out
+	function zoomOut(){
+		if(zoomlvl > 0.6){
+			zoomlvl -= 0.1;
+			container.style.transition = 'transform 1.0s';
+			container.style.transform = `scale(${zoomlvl})`;
+		}
+	}
+
+	//Focus on a specific grave
+	function focus(grave_id){
+		zoomlvl = 1.0;
+		var width = $("#map-pic").width();
+  		var height = $("#map-pic").height();
+
+		$.ajax({
+			type:'post',
+			url:'includes/searchGrave.php',
+			data:{
+				grave:grave_id
+			},
+			success:function(result, status){
+				var obj = JSON.parse(result);
+				var left = '-' + ((obj.x1 / width) * 100) + '%';
+				var top = '-' + ((obj.y1 / height) * 100) + '%';
+				var right = 100 - ((obj.x1 / width) * 100) + '%';
+				var bottom = 100 - ((obj.y1 / height) * 100) + '%';
+				console.log("top: " + top);
+				console.log("left: " + left);
+				console.log("right: " + right);
+				console.log("bottom: " + bottom);
+				container.style.top = top;
+        		container.style.left = left;
+				container.style.right = right;
+				container.style.bottom = bottom;
+        		container.style.transform = `scale(${zoomlvl})`;
+			}
+		});
+
+    }
+
+	//search grave by deceased name
+	function searchGraveName(){
+		var name = $("#search-name").val();
+		//console.log('grave_id: ' + grave_id);
+		$.ajax({
+			type:'post',
+			url:'includes/functionFindGraveByName.php',
+			data:{
+				search_name:name
+			},
+			success:function(result, status){
+				$("#map-display").html(result);
+				loadGraves();
+				//focus(grave_id);
+				
+			}
+		});
 	}
 
 // End of #modal-grave javascript

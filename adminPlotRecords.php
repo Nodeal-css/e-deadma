@@ -185,12 +185,13 @@
                     <tr><td class="w3-right">Zip code: </td><td><input type="text" class="w3-input" name="vw-zip" id="vw-zip" style="width:80%;"></td></tr>
                     <tr><td class="w3-right">Phone #: </td><td><input type="text" class="w3-input" name="vw-phone" id="vw-phone" style="width:80%;"></td></tr>
                     <tr><td class="w3-right">Email: </td><td><input type="text" class="w3-input" name="vw-email" id="vw-email" style="width:80%;"></td></tr>
-                    <tr><td>owner: </td><td><input type="text" class="w3-input" name="vw-owner-id" id="vw-owner-id" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">owner: </td><td><input type="text" class="w3-input" name="vw-owner-id" id="vw-owner-id" style="width:80%;"></td></tr>
                 </table>
             </div>
         </div>
         <div class="w3-container">
             <button class="w3-button w3-round w3-right" style="background-color: rgb(223, 116, 67);color: white;" onclick="locateCemeteryMap();">Locate</button>
+            <button class="w3-button w3-round w3-right w3-red" style="background-color: rgb(223, 116, 67);color: white;" onclick="deletePlotRecord();">Delete</button>
         </div>
     </div>
 </div>
@@ -397,13 +398,11 @@
   		addPlotRecord1(id, owner, date_purchase, purchase_price, sqr);
         displayPlotOwnership();
   	}
-    //Refresh the gridView everytime there will be a new record added.
-    
   }
 
   //function for adding non existing owner for plot_ownership table
   function addPlotRecord2(fname, lname, mi, street, city, zip, phone, email, date_purchase, purchase_price, sqr){
-    if(notNullFieldsMode2()){
+    if(fname != "" && lname != "" && mi != "" && street != "" && city != "" && zip != "" && phone != "" && email != "" && date_purchase != "" && purchase_price != "" && sqr != ""){
         $.ajax({
             url:'includes/functionAddPlotRecordMode2.php',
             type:'post',
@@ -428,6 +427,7 @@
                 clearInputFields();
                 $("#owner-find").show();
                 document.getElementById('modal-plot-record').style.display = 'none';
+                
             }
         });
     }else{
@@ -437,7 +437,7 @@
 
   //function for adding existing owner for plot_ownership table
   function addPlotRecord1(id, owner, date_purchase, purchase_price, sqr){
-    if(notNullFieldsMode1()){
+    if(id != "" && owner != "" && date_purchase != "" && purchase_price != "" && sqr != ""){
         $.ajax({
             url:'includes/functionAddPlotRecordMode1.php',
             type:'post',
@@ -499,9 +499,10 @@
         url:'includes/functionDisplayPlotOwnership.php',
         type:'post',
         data:{
-            request:'request'
+            request_load_plot:'request'
         },
         success:function(data, status){
+            console.log("status: " + status);
             $("#grid-view").html(data);
         }
     });
@@ -542,6 +543,8 @@
             if(obj.pdf_path != null){
                 $("#deed-thumbnail").attr("src", obj.pdf_path.substring(20));
                 console.log("output: " + $("#deed-thumbnail").attr("src"));
+            }else{
+
             }
         }
     });
@@ -582,6 +585,7 @@
   $("#file-upload").on('submit', function(e) {
     e.preventDefault();
     var form = document.getElementById('file-upload');
+    var plot_id = $("#upload-plot-id").val();
     var fdata = new FormData(form);
     
     $.ajax({
@@ -594,8 +598,7 @@
         success:function(data, status){
             alert(data);
             $("#upload-pdf").val(null);
-            openModalView(plot, $("#vw-owner-id").val());
-            //closeVWModal();
+            openModalView(plot_id, $("#vw-owner-id").val());
         }
     });
   });
@@ -657,10 +660,27 @@
   function locateCemeteryMap(){
     var grave = $("#vw-grave-id").val();
     if(grave != ""){
-        window.location.href = "adminCemeteryMap.php?request=" + "locate" + "&grave_id=" + grave;
+        window.location.href = "adminCemeteryMap.php?request=" + "Plot-locate" + "&grave=" + grave;
     }else{
         alert('This plot record has not been allocated to the cemetery map.\nPlease assign this record first to the map');
     }
+  }
+
+  //function to delete the plot record and it's cemetery_deed
+  function deletePlotRecord(){
+    var plot_id = $("#vw-plot-id").val();
+    $.ajax({
+        type:'post',
+        url:'includes/functionDeletePlotRecord.php',
+        data:{
+            plot: plot_id
+        },
+        success:function(result, status){
+            alert(result);
+            closeVWModal();
+            displayPlotOwnership();
+        }
+    });
   }
 
 </script>

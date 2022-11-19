@@ -3,7 +3,7 @@ include 'connectDB.php';
 session_start();
 
 //Fix: change id's to names of the owner or the deceased
-if(isset($_POST['request'])){
+if(isset($_POST['request_load_plot'])){
 	$html = "";
 	$cemetery = isset($_SESSION['cemetery_id']) ? $_SESSION['cemetery_id'] : '';
 
@@ -11,18 +11,9 @@ if(isset($_POST['request'])){
 	$result = mysqli_query($conn, $sql);
 	if(mysqli_num_rows($result) > 0){
 		while($row = mysqli_fetch_assoc($result)){
-			$html .= "<div class='w3-col m3 w3-margin w3-round-xlarge w3-container' style='height: 350px;background-color: rgb(223, 116, 67);color:white;'>
-			<table class='w3-table'>
-			<tr><td></td><td class='w3-right'><button onclick='openModalView(". $row['plot_id'] .", ". $row['owner'] .");' class='w3-button w3-round w3-white'>View</button></td></tr>
-			<tr><td>date: </td><td>" . $row['date_purchased'] . "</td></tr>
-			<tr><td>status: </td><td>" . $row['ownership_status'] . "</td></tr>
-			<tr><td>owner: </td><td>" . $row['name'] . "</td></tr>
-			<tr><td>Deceased: </td><td>" . getDeceased($row['grave_id']) . "</td></tr>
-			</table></div>";
+			$html .= "<div class='w3-col m3 w3-margin w3-round-xlarge w3-container' style='height: 350px;background-color: rgb(223, 116, 67);color:white;'><table class='w3-table'><tr><td></td><td class='w3-right'><button onclick='openModalView(". $row['plot_id'] .", ". $row['owner'] .");' class='w3-button w3-round w3-white'>View</button></td></tr><tr><td>date: </td><td>" . $row['date_purchased'] . "</td></tr><tr><td>status: </td><td>" . $row['ownership_status'] . "</td></tr><tr><td>owner: </td><td>" . $row['name'] . "</td></tr><tr><td>Deceased: </td><td>" . getDeceased($row['grave_id']) . "</td></tr></table></div>";
 		}
 		echo '<div class="w3-row">' . $html . '</div>';
-	}else{
-		echo 'Empty Plot Records';
 	}
 	
 }

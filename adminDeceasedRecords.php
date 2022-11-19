@@ -79,7 +79,11 @@
                     <span class="text" id="logo_cem_name">Dashboard</span>
                 </div>
 
-                <button class="w3-button w3-bordered w3-right w3-margin-bottom w3-round" onclick="modalInsertDeceased();" style="background-color: rgb(223, 116, 67);color: white;">Add</button>
+                <div class='w3-bar'>
+                    <button class="w3-button w3-left w3-margin-bottom w3-bar-item" onclick="modalInsertDeceased();" style="background-color: rgb(223, 116, 67);color: white;">Add</button>
+                    <button class="w3-button w3-left w3-margin-bottom w3-bar-item" style="background-color: rgb(223, 116, 67);color: white;" onclick="getDeceasedExceed();">Exceed 5 yrs</button>
+                    <button class="w3-button w3-left w3-margin-bottom w3-bar-item" style="background-color: rgb(223, 116, 67);color: white;" onclick="getDeceasedNullGraveId();">Not in Map</button>
+                </div>
                 <div>
                     <table class="w3-table">
                     	<thead>
@@ -131,7 +135,7 @@
               </div>
           </div>
           <div class="w3-container">
-            <button class="w3-button w3-right w3-round" id="btn-insert-deceased" onclick="addDeceasedRecords();" style="background-color: rgb(223, 116, 67);color: white;">Add +</button>
+            <button class="w3-button w3-right" id="btn-insert-deceased" onclick="addDeceasedRecords();" style="background-color: rgb(223, 116, 67);color: white;">Add +</button>
         </div>
     </div>
 </div>
@@ -172,11 +176,13 @@
               </select>
               <input type="number" id="upd-age" name="upd-age" class="w3-input" required>
               <input type="text" id="upd-epitaph" name="upd-epitaph" class="w3-input" required>
+              <input type="hidden" id="upd-grave-id" name="upd-grave-id" required>
           </div>
       </div>
       <div class="w3-container w3-padding-24">
         <button class="w3-button w3-right w3-round" onclick="updateDeceasedRecord()" style="background-color: rgb(223, 116, 67);color: white;">Save</button>
         <button class="w3-button w3-right w3-round" onclick="deleteDeceasedRecord()" style="margin-right: 30px;background-color: rgb(218, 52, 48);color: white;">Delete</button>
+        <button class="w3-button w3-round" onclick="locateDeceasedRecord();" style="background-color: rgb(223, 116, 67);color: white;">Locate</button>
     </div>
 </div>
 </div>
@@ -354,7 +360,7 @@
 }
 
   //function to open modal of modal-update the deceased record
-  function openUpdateModal(deceased_id, fname, lname, mi, burialdate, birthdate, marital, age, epitaph){
+  function openUpdateModal(deceased_id, fname, lname, mi, burialdate, birthdate, marital, age, epitaph, grave_id){
     document.getElementById('modal-update').style.display = 'block';
     $("#upd-deceased-id").val(deceased_id);
     $("#upd-first-name").val(fname);
@@ -365,6 +371,8 @@
     $("#upd-marital-status").val(marital);
     $("#upd-age").val(age);
     $("#upd-epitaph").val(epitaph);
+    console.log("grave_id: " + grave_id);
+    $("#upd-grave-id").val(grave_id);
 }
 
   //function to delete a deceased Record
@@ -464,6 +472,50 @@
                 $("#table-body").html(data);
             }
         });
+    }
+
+    //display deceased records that has not yet placed to the grave
+    function getDeceasedNullGraveId(){
+        var request = 'dislay';
+        $.ajax({
+            url:'includes/functionDisplayDeceasedNullGrave.php',
+            type:'post',
+            data:{
+                request1:request
+            },
+            success:function(data, status){
+                //do something
+                alert('Highlighted rows are not assigned to a grave');
+                $("#table-body").html(data);
+            }
+        });
+    }
+
+    //function deceased records that exceeded 5 years
+    function getDeceasedExceed(){
+        var request = 'dislay';
+        $.ajax({
+            url:'includes/functionDisplayExceedDeceased.php',
+            type:'post',
+            data:{
+                request2:request
+            },
+            success:function(data, status){
+                //do something
+                alert('Highlighted rows exceeded 5 years in the cemetery');
+                $("#table-body").html(data);
+            }
+        });
+    }
+
+    //function to locate the specific grave of a record
+    function locateDeceasedRecord(){
+        var grave = $("#upd-grave-id").val();
+        if(grave != ""){
+            window.location.href = "adminCemeteryMap.php?request=" + "locate" + "&grave_id=" + grave;
+        }else{
+            alert("This deceased record has not been allocated to the cemetery map.\nPlease assign this record first to the map");
+        }
     }
 </script>
 
