@@ -511,7 +511,7 @@
     //function to locate the specific grave of a record
     function locateDeceasedRecord(){
         var grave = $("#upd-grave-id").val();
-        if(grave != null){
+        if(grave != ""){
             localStorage.setItem('grave-id', grave);
             window.location.href = "adminCemeteryMap.php";
         }else{

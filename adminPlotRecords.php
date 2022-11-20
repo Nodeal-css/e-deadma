@@ -659,7 +659,7 @@
   //Method to open the cemetery map of a specific plot record
   function locateCemeteryMap(){
     var grave = $("#vw-grave-id").val();
-    if(grave != null){
+    if(grave != ""){
         localStorage.setItem('grave-id', grave);
         window.location.href = "adminCemeteryMap.php";
     }else{

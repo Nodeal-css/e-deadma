@@ -212,15 +212,9 @@
        	getSession();
 		findDeceasedModal();
 		findOwnerModal();
-
 		displayImgMap();
 		deleteCacheImages();
-		getAllCoordinates();
-		getWidthHeight();
-
 		checkOpenGrave();
-
-		
 	});
 	//window.setTimeout(checkOpenGrave(), 9000); MIGHT Transfer this to pure php code
 	//Onload of image
@@ -228,8 +222,10 @@
 		var id = localStorage.getItem('grave-id');
 		if(id != ""){
 			searchGrave(id);
-			localStorage.removeItem('grave-id');
+		}else{
+			getAllCoordinates();
 		}
+		
 		getWidthHeight();
 	});
 	
@@ -249,19 +245,7 @@
 				console.log("request: " + req.get('request'));
 				openGraveModal(req.get('grave-id'));
 				loadAssignPlot();
-			}/*else if(req.get('request') == 'locate' && req.get('grave_id') != null){
-				$("#search-grave").val(req.get('grave_id'));
-				$("#map-pic").on('load', function() {
-					searchGrave();
-					console.log("from deceased record: " + req.get('grave_id'));
-				});
-			}else if(req.get('request') == 'Plot-locate' && req.get('grave') != null){
-				$("#search-grave").val(req.get('grave'));
-				$("#map-pic").on('load', function() {
-					searchGrave();
-					console.log("from plot record: " + req.get('grave'));
-				});
-			}*/
+			}
 		}
 	}
 
@@ -308,6 +292,7 @@
 					],
 					mapKey: 'state'
 				});
+				localStorage.removeItem('grave-id');
 			}else{
 				alert('not finished, reloading the page');
 				//window.location.href ="adminCemeteryMap.php";
@@ -417,7 +402,6 @@
 		$.ajax({
 			type:'post',
 			url:'includes/functionLoadMap.php',
-			async:true,
 			data:{
 				request:req
 			},
