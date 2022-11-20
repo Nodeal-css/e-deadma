@@ -659,8 +659,9 @@
   //Method to open the cemetery map of a specific plot record
   function locateCemeteryMap(){
     var grave = $("#vw-grave-id").val();
-    if(grave != ""){
-        window.location.href = "adminCemeteryMap.php?request=" + "Plot-locate" + "&grave=" + grave;
+    if(grave != null){
+        localStorage.setItem('grave-id', grave);
+        window.location.href = "adminCemeteryMap.php";
     }else{
         alert('This plot record has not been allocated to the cemetery map.\nPlease assign this record first to the map');
     }

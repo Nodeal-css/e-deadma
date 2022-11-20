@@ -17,7 +17,7 @@ if(isset($_POST['request'])){
 }
 
 // For searching
-if(isset($_POST['search'])){
+if(isset($_POST['grave'])){
     $grave_id = isset($_POST['grave']) ? $_POST['grave'] : '';
     $html = "";
 

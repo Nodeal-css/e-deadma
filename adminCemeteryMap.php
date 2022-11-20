@@ -218,16 +218,21 @@
 		getAllCoordinates();
 		getWidthHeight();
 
+		checkOpenGrave();
+
 		
 	});
-	window.setTimeout(checkOpenGrave(), 9000);
+	//window.setTimeout(checkOpenGrave(), 9000); MIGHT Transfer this to pure php code
 	//Onload of image
 	$("#map-pic").on('load', function() {
+		var id = localStorage.getItem('grave-id');
+		if(id != ""){
+			searchGrave(id);
+			localStorage.removeItem('grave-id');
+		}
 		getWidthHeight();
 	});
 	
-	//check if the loadGraves is running
-	var flag = false;
 	//this function will check if opening this page is from adding deceased records
 	function checkOpenGrave(){
 		var urlstr = window.location.search;
@@ -239,35 +244,33 @@
 				console.log("request: " + req.get('request'));
 				openGraveModal(grave_id);
 				loadAssignDeceased();
-			}
-			if(req.get('grave-id') != null && req.get('request') == 'plot'){
+			}else if(req.get('grave-id') != null && req.get('request') == 'plot'){
 				console.log("grave id: " + req.get('grave-id'));
 				console.log("request: " + req.get('request'));
 				openGraveModal(req.get('grave-id'));
 				loadAssignPlot();
-			}
-			if(req.get('request') == 'locate' && req.get('grave_id') != null){
+			}/*else if(req.get('request') == 'locate' && req.get('grave_id') != null){
 				$("#search-grave").val(req.get('grave_id'));
 				$("#map-pic").on('load', function() {
 					searchGrave();
 					console.log("from deceased record: " + req.get('grave_id'));
 				});
-			}
-			if(req.get('request') == 'Plot-locate' && req.get('grave') != null){
+			}else if(req.get('request') == 'Plot-locate' && req.get('grave') != null){
 				$("#search-grave").val(req.get('grave'));
 				$("#map-pic").on('load', function() {
 					searchGrave();
 					console.log("from plot record: " + req.get('grave'));
 				});
-			}
+			}*/
 		}
 	}
+
+	//Function for receiving localStorage of grave_id data from deceased and plot page
 
 	//Function to display all the graves using mapster framework |
 	//Note: error will occur when image is not yet loaded. So this method is called inside #map-pic onload
 	function loadGraves(){
 			if($('#map-pic').attr('src') != ""){
-				flag = true;
 				$('#map-pic').mapster({
 					areas: [
 						{
@@ -522,6 +525,7 @@
 			success:function(result, status){
 				$('#map-display').html(result);
 				loadGraves();
+				
 			}
 		});
 	}
@@ -545,14 +549,13 @@
 
 	//Function to search a specific grave and load new element inside #map-display 
 	//Change the function to be able to search by name of the deceased or grave id
-	function searchGrave(){
-		var grave_id = $("#search-grave").val();
+	function searchGrave(grave_id){
+		//var grave_id = $("#search-grave").val();
 		//console.log('grave_id: ' + grave_id);
 		$.ajax({
 			type:'post',
 			url:'includes/functionGetAllCoordinates.php',
 			data:{
-				search:'search-grave',
 				grave:grave_id
 			},
 			success:function(result, status){

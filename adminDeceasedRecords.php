@@ -511,8 +511,9 @@
     //function to locate the specific grave of a record
     function locateDeceasedRecord(){
         var grave = $("#upd-grave-id").val();
-        if(grave != ""){
-            window.location.href = "adminCemeteryMap.php?request=" + "locate" + "&grave_id=" + grave;
+        if(grave != null){
+            localStorage.setItem('grave-id', grave);
+            window.location.href = "adminCemeteryMap.php";
         }else{
             alert("This deceased record has not been allocated to the cemetery map.\nPlease assign this record first to the map");
         }
