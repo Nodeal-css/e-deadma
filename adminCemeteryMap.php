@@ -56,7 +56,7 @@
                     <i class="uil uil-location-point"></i>
                     <span class="link-name">Cemetery Map</span>
                 </a></li>
-                <li><a href="#">
+                <li><a href="adminAccounting.php">
                     <i class="uil uil-bill"></i>
                     <span class="link-name">Accounting</span>
                 </a></li>

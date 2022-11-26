@@ -10,6 +10,7 @@
      
     <!-- Iconscout CSS para sa mga icons ne -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>Dashboard</title>
 </head>
 <body>
@@ -25,7 +26,7 @@
 
         <div class="menu-items">
             <ul class="nav-links">
-                <li><a href="admin.html">
+                <li><a href="#">
                     <i class="uil uil-estate"></i>
                     <span class="link-name">Dashboard</span>
                 </a></li>
@@ -41,7 +42,7 @@
                     <i class="uil uil-location-point"></i>
                     <span class="link-name">Cemetery Map</span>
                 </a></li>
-                <li><a href="#">
+                <li><a href="adminAccounting.php">
                     <i class="uil uil-bill"></i>
                     <span class="link-name">Accounting</span>
                 </a></li>
@@ -159,6 +160,8 @@
     });
   }
 
+// chart framework from google
+//https://developers.google.com/chart/interactive/docs/gallery/linechart
   
 </script>
 <!-- Javascript starts -->
