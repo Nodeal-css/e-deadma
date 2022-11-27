@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- CSS  -->
     <link rel="stylesheet" href="css/admin.css">
-     
+
     <!-- Iconscout CSS para sa mga icons ne -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -20,9 +20,9 @@
                 <img src="assets/KG.png" alt="">
             </div>
             <span class="logo_name">ReConnect</span>
-            
+
         </div>
-        
+
 
         <div class="menu-items">
             <ul class="nav-links">
@@ -47,14 +47,14 @@
                     <span class="link-name">Accounting</span>
                 </a></li>
             </ul>
-            
+
             <ul class="logout-mode">
                 <li><a href="#">
                     <i class="uil uil-signout"></i>
                     <span class="link-name" onclick="logout();">Logout</span>
                 </a></li>
             </ul>
-            
+
         </div>
     </nav>
 
@@ -79,31 +79,37 @@
                     <span class="text" id="logo_cem_name">Dashboard</span>
                 </div>
 
-                <div class="boxes">
-                    <div class="box box1">       
-                        <span class="number">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo nostrum voluptatem eaque.</span>
-                    </div>
-                    <div class="box box2">
-                        <span class="number">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nemo maxime asperiores eveniet.</span>
-                    </div>
-                    <div class="box box3">
-                        <span class="number">Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet saepe ducimus fugiat?</span>
-                    </div>
+                <div class="w3-card-4 w3-row">
+                  <div class="w3-col s7" id="curve_chart" style="width: 550px; height: 400px"></div>
+                  <div class="w3-col s5" style="padding-top: 40px;">
+                      <div style="font-size: 10px; height: 200px; overflow: scroll;">
+                          <header><b>Journal entry</b></header>
+                            <table class="w3-table" id="journal-table">
+
+                            </table>
+                      </div><br>
+                      <div>
+                          <header>Report</header>
+                      </div>
+                  </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
 
 <!-- Javascript starts -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 
   $(document).ready(function(){
     checkSession();
     getSession();
+
+    getAllJournal();
   });
-  
+
   // this function checks for session, will automatically load with the document
   function checkSession(){
     var req = "check";
@@ -116,7 +122,7 @@
       success:function(data, status){
         if(data != 'true'){
           alert('The session is INVALID');
-          
+
           window.location.href = "adminlogin.php";
         }
       }
@@ -160,9 +166,83 @@
     });
   }
 
-// chart framework from google
+// Populate drawChart values from database using ajax
 //https://developers.google.com/chart/interactive/docs/gallery/linechart
-  
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var obj;
+        $.ajax({
+            type: 'post',
+            url: 'includes/getAllGraphdata.php',
+            data: {
+                request: 'graph'
+            },
+            success:function(result, status){
+              obj = JSON.parse(result);
+			  if(obj.length >= 5){
+              var data = google.visualization.arrayToDataTable([
+                ['Month', 'Revenue', 'Expenses'],
+                [obj[4][3],  parseFloat(obj[4][4]),    parseFloat(obj[4][5])],
+                [obj[3][3],  parseFloat(obj[3][4]),    parseFloat(obj[3][5])],
+                [obj[2][3],  parseFloat(obj[3][4]),    parseFloat(obj[3][5])],
+                [obj[1][3],  parseFloat(obj[1][4]),    parseFloat(obj[1][5])],
+                [obj[0][3],  parseFloat(obj[0][4]),    parseFloat(obj[0][5])]
+              ]);
+
+              var options = {
+                title: 'Company Performance',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+              };
+
+              var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+              chart.draw(data, options);
+            }else{
+				var data = google.visualization.arrayToDataTable([
+                ['Month', 'Revenue', 'Expenses'],
+                ["Month",  1,    1],
+                ["Month",  1,    1],
+                ["Month",  1,    1],
+                ["Month",  1,    1],
+                ["Month",  1,    1]
+                ]);
+
+              var options = {
+                title: 'Must exceed at least 5 months to display full graph',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+              };
+
+              var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+              chart.draw(data, options);
+			}
+			}
+        });
+      }
+
+  //Function to display all journal entry in a table
+  function getAllJournal(){
+    $.ajax({
+       type: 'post',
+       url: 'includes/getAllJournal.php',
+       data: {
+          journal: 'journal'
+       },
+       success:function(result, status){
+          $("#journal-table").html(result);
+       }
+    });
+  }
+
+  //Function to populate the google chart and send a JSON data to drawChart function
+  function populateChart(){
+
+  }
+
 </script>
 <!-- Javascript starts -->
 </body>
