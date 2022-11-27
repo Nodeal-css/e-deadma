@@ -378,6 +378,12 @@ nav.close ~ .dashboard .top{
     background-color: royalblue;
     margin-top: 15px;
 }
+.deed #file-upload button{
+    background-color: var(--border-color);
+    padding: 8px;
+    border-radius: 20px;
+    margin-bottom: 5px;
+}
 .lbtn button{
     float: right;
     padding: 10px;
