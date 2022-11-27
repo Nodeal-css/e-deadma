@@ -5,7 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<!-- CSS  -->
-    <link rel="stylesheet" href="css/admin.css">
+
+    <link rel="stylesheet" href="css/precords.css?v=<?php echo time(); ?>">
     
     <!-- Iconscout CSS para sa mga icons ne -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
@@ -35,11 +36,11 @@
                     <i class="uil uil-folder"></i>
                     <span class="link-name">Deceased Records</span>
                 </a></li>
-                <li><a href="#">
+                <li><a href="adminPlotRecords.php">
                     <i class="uil uil-folder-open"></i>
                     <span class="link-name">Plot Records</span>
                 </a></li>
-                <li><a href="map.html">
+                <li><a href="adminCemeteryMap.php">
                     <i class="uil uil-location-point"></i>
                     <span class="link-name">Cemetery Map</span>
                 </a></li>
@@ -58,7 +59,7 @@
             
         </div>
     </nav>
-    <!-- Endof navigation menu -->
+<!-- Endof navigation menu -->
 
     <!-- Start of Plot records Dashboard-->
     <section class="dashboard">
@@ -67,11 +68,11 @@
 
             <div class="search-box">
                 <input type="text" placeholder="Search by name" id="search-deceased">
-                <i class="uil uil-search" style="margin-left: 240px;" onclick="searchDeceasedRecords();"></i>
+                <i class="uil uil-search" onclick="searchDeceasedRecords();"></i>
             </div>
             <div>
-                <p id="active-user" style="float:left;margin-top: 20px;margin-right: 10px;"></p>
-                <img src="assets/PP.webp" alt="">
+                <p id="active-user"></p>
+                <img src="assets/people.png" alt="">
             </div>
         </div>
 
@@ -82,10 +83,10 @@
                     <span class="text" id="logo_cem_name"></span>
                 </div>
 
-                <button class="w3-button w3-bordered w3-right w3-margin-bottom w3-round" onclick="document.getElementById('modal-plot-record').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Add +</button>
+                <button class="w3-button" onclick="document.getElementById('modal-plot-record').style.display='block'">Add</button>
 
                 <!-- Main content -->
-                <div>
+                <div id="grid-view">
                     
                 </div>
                 <!-- Main content -->
@@ -97,24 +98,26 @@
 <!-- Modal for adding Plot records-->
 <div class="w3-modal" id="modal-plot-record">
 	<div class="w3-modal-content">
-		<span onclick="closeModal();" style="background-color: rgb(223, 116, 67);color:white;" class="w3-button w3-display-topright">&times;</span>
-		<header class="w3-padding" style="background-color: rgb(223, 116, 67);">
-			<h2 style="color:white;">Plot Ownership</h2>
+		<span onclick="closeModal();" class="w3-button w3-display-topright">&times;</span>
+		<header class="had w3-padding">
+			<h2>Add Plot Record</h2>
 		</header>
 		<div class="w3-row w3-padding">
-			<div class="w3-col s5 w3-left" id="plot-info">
-				<label class="w3-left">Owner </label><button class="w3-right" id="btn-display-owner">Add new owner</button>
+			<div class="w3-col s12" id="plot-info">
+				<label>Owner:</label>
+                <button id="btn-display-owner">Add New Owner</button>
                 <input type="hidden" name="owner-id" id="owner-id">
 				<input type="text" class="w3-input" name="owner-find" id="owner-find" autocomplete="off" placeholder="Choose from the dropdown">
-				<div id="back-result-owner" style="position:fixed;background-color: white;"></div>
-				<label>Date of purchase</label>
+				<div id="back-result-owner" ></div>
+                <br>
+				<label>Date of purchase:</label>
 				<input type="date" class="w3-input" name="date-purchase" id="date-purchase">
-				<label>Purchase price</label>
+				<label>Purchase price:</label>
 				<input type="number" class="w3-input" name="purchase-price" id="purchase-price">
-				<label>Square meters</label>
+				<label>Square meters:</label>
 				<input type="text" class="w3-input" name="sqr-meters" id="sqr-meters">
 			</div>
-			<div class="w3-col s6 w3-right" id="owner-info">
+			<div class="w3-col s12" id="owner-info">
 				<label>First name</label>
 				<input type="text" class="w3-input" name="owner-fname" id="owner-fname" >
 				<label>Last name</label>
@@ -133,12 +136,98 @@
 				<input type="text" class="w3-input" name="owner-email" id="owner-email">
 			</div>
 		</div>
-		<div class="w3-container">
-			<button class="w3-button w3-round w3-right" style="background-color: rgb(223, 116, 67);color: white;" onclick="addPlotRecord();">Save</button>
+		<div class="sbtn w3-container">
+			<button class="w3-button w3-round w3-right" onclick="addPlotRecord();">Save</button>
 		</div>
 	</div>
 </div>
 <!-- End of Modal for adding Plot records-->
+
+<!-- Start of Modal for viewing the plot records -->
+<div class="w3-modal" id="mdl-view">
+    <div class="po w3-modal-content">
+        <span onclick="closeVWModal();" class="w3-button w3-display-topright">&times;</span>
+        <header class="w3-padding">
+            <h2>Plot Ownership</h2>
+        </header>
+        <div class="po1 w3-row w3-padding">
+            <div class="w3-col s6">
+                <table class="w3-table">
+                    <tr>
+                        <td></td>
+                        <td><b>Plot</b></td>
+                    </tr>
+                    <tr>
+                        <td>Date purchased:</td>
+                        <td>
+                            <input type="text" class="w3-input" name="vw-date-purchase" id="vw-date-purchase">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Price:</td>
+                        <td>
+                            <input type="text" class="w3-input" name="vw-price" id="vw-price">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Status:</td>
+                        <td><input type="text" class="w3-input" name="vw-status" id="vw-status">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Square meters:</td>
+                        <td>
+                            <input type="text" class="w3-input" name="vw-sqr-meters" id="vw-sqr-meters">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Plot:</td>
+                        <td>
+                            <input type="text" class="w3-input" name="vw-plot-id" id="vw-plot-id">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Grave id:</td>
+                        <td>
+                            <input type="text" class="w3-input" name="vw-grave-id" id="vw-grave-id">
+                        </td>
+                    </tr>
+                </table>
+                <div class="deed w3-container w3-center">
+                    <h4>Cemetery Deed...</h4>
+                    <div>
+                        <div onclick="openPDFwindow();">
+                                <iframe src="" id="deed-thumbnail" type="application/pdf" height="140" width="120"></iframe> 
+                        </div>
+                        <form id="file-upload">
+                            <input type="hidden" name="upload-plot-id" id="upload-plot-id">
+                            <input type="file" name="upload-pdf" id="upload-pdf" accept="application/pdf">
+                            <button type="submit" class="w3-button" id="submit-pdf">Upload</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="w3-col s6">
+                <table class="w3-table">
+                    <tr><td></td><td><b>Owner</b></td></tr>
+                    <tr><td class="w3-right">First name: </td><td><input type="text" class="w3-input" name="vw-fname" id="vw-fname" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Last name: </td><td><input type="text" class="w3-input" name="vw-lname" id="vw-lname" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Middle initial: </td><td><input type="text" class="w3-input" name="vw-mi" id="vw-mi" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Street address: </td><td><input type="text" class="w3-input" name="vw-street" id="vw-street" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">City address: </td><td><input type="text" class="w3-input" name="vw-city" id="vw-city" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Zip code: </td><td><input type="text" class="w3-input" name="vw-zip" id="vw-zip" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Phone #: </td><td><input type="text" class="w3-input" name="vw-phone" id="vw-phone" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Email: </td><td><input type="text" class="w3-input" name="vw-email" id="vw-email" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Owner: </td><td><input type="text" class="w3-input" name="vw-owner-id" id="vw-owner-id" style="width:80%;"></td></tr>
+                </table>
+            </div>
+        </div>
+        <div class="lbtn w3-container">
+            <button class="w3-button w3-round w3-right" onclick="">Locate</button>
+        </div>
+    </div>
+</div>
+<!-- End of Modal for viewing the plot records -->
 
 <!-- Start of javascript -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -149,7 +238,8 @@
     	checkSession();
     	findOwner();
    		getSession();
-   		//getPlotRecords()
+        displayPlotOwnership();
+        deleteCache();
 
    		console.log("flag: " + flag);
    		$("#owner-info").hide();
@@ -177,7 +267,7 @@
   				if(data != 'true'){
   					alert('The session is INVALID');
 
-  					window.location.href = "adminlogin.php";
+  					window.location.href = "login.php";
   				}
   			}
   		});
@@ -195,7 +285,7 @@
   			},
   			success:function(data, status){
   				if(data == 'logout'){
-  					window.location.href = "adminlogin.php";
+  					window.location.href = "login.php";
   				}
   			}
   		});
@@ -259,9 +349,10 @@
   //NEXT ASSIGNMENT
   //
   //
-  //
+  //set ajax functions to async = false 
   //
   //update this function where in the name will bring the owner id during keyup
+  //user will have to click the drop down div so that owner_id will output to the #owner-id
   function addPlotRecord(){
     var id = $("#owner-id").val();
     var owner = $("#owner-find").val();
@@ -281,8 +372,10 @@
   	if(flag){
   		// for not existing owner record
         addPlotRecord2(fname, lname, mi, street, city, zip, phone, email, date_purchase, purchase_price, sqr);
+        displayPlotOwnership();
   	}else{
   		addPlotRecord1(id, owner, date_purchase, purchase_price, sqr);
+        displayPlotOwnership();
   	}
     //Refresh the gridView everytime there will be a new record added.
     
@@ -378,6 +471,136 @@
     $("#owner-info").hide();
     $("#btn-display-owner").show();
   }
+
+  //display plot_ownership using gridview
+  function displayPlotOwnership(){
+    $.ajax({
+        url:'includes/functionDisplayPlotOwnership.php',
+        type:'post',
+        data:{
+            request:'request'
+        },
+        success:function(data, status){
+            $("#grid-view").html(data);
+        }
+    });
+  }
+
+  //function to populate data in opening #mdl-view
+  function openModalView(plot_id, owner_id){
+    document.getElementById('mdl-view').style.display = 'block';
+    $("#vw-plot-id").val(plot_id);
+    $("#vw-owner-id").val(owner_id);
+    $("#upload-plot-id").val(plot_id);
+
+    $.ajax({
+        url:'includes/functionViewPlot.php',
+        type:'post',
+        data:{
+            plotID:plot_id
+        },
+        success:function(data, status){
+            //console.log(data);
+            var obj = JSON.parse(data);
+            
+            $("#vw-date-purchase").val(obj.date_purchased);
+            $("#vw-price").val(obj.purchase_price);
+            $("#vw-status").val(obj.ownership_status);
+            $("#vw-sqr-meters").val(obj.square_meters);
+            $("#vw-grave-id").val(obj.grave_id);
+
+            $("#vw-fname").val(obj.firstname);
+            $("#vw-lname").val(obj.lastname);
+            $("#vw-mi").val(obj.middle);
+            $("#vw-street").val(obj.street_add);
+            $("#vw-city").val(obj.city_add);
+            $("#vw-zip").val(obj.zip_code);
+            $("#vw-phone").val(obj.phone_num);
+            $("#vw-email").val(obj.email_address);
+
+            if(obj.pdf_path != null){
+                $("#deed-thumbnail").attr("src", obj.pdf_path.substring(20));
+                console.log("output: " + $("#deed-thumbnail").attr("src"));
+            }
+        }
+    });
+  }
+  
+  //clear fields on view modal
+  //close view modal
+  function closeVWModal(){
+    $("#vw-date-purchase").val('');
+    $("#vw-price").val('');
+    $("#vw-status").val('');
+    $("#vw-sqr-meters").val('');
+    $("#vw-grave-id").val('');
+
+    $("#vw-fname").val('');
+    $("#vw-lname").val('');
+    $("#vw-mi").val('');
+    $("#vw-street").val('');
+    $("#vw-city").val('');
+    $("#vw-zip").val('');
+    $("#vw-phone").val('');
+    $("#vw-email").val(''); 
+    $("#upload-plot-id").val('');
+
+    $("#deed-thumbnail").attr("src", "");
+    $("#upload-pdf").val(null);
+    document.getElementById('mdl-view').style.display = 'none';
+  }
+
+  //function to upload pdf file
+  //Assignment:
+  //Update this part wherein after insert - will change the appearance of document field - display pdf
+  //Note: that there's only one document per plot_record
+  //
+  //ATTENTION: 
+  //MUST delete multiple files if not associated to the records in the database
+  //created deletion event - pls try to test next session
+  $("#file-upload").on('submit', function(e) {
+    e.preventDefault();
+    var form = document.getElementById('file-upload');
+    var fdata = new FormData(form);
+    var plot = $("#upload-plot-id").val();
+    $.ajax({
+        type:'post',
+        url:'includes/uploadPDF.php',
+        data:fdata, 
+        contentType: false,
+        cache: false,
+        processData:false,
+        success:function(data, status){
+            alert(data);
+            $("#upload-pdf").val(null);
+            openModalView(plot, $("#vw-owner-id").val());
+            //closeVWModal();
+        }
+    });
+  });
+
+  //An onclick function to open a pdf file to another window
+  function openPDFwindow(){
+    var pdfPath = $("#deed-thumbnail").attr("src");
+    if(pdfPath != ""){
+        window.open(pdfPath, '_blank');
+    }
+  }
+
+  //function to delete pdf files in the documents folder to avoid duplication
+  function deleteCache(){
+    $.ajax({
+        type:'post',
+        url:'includes/deletePDF.php',
+        data:{
+            request:'delete'
+        },
+        success:function(data, status){
+            console.log(data);
+        }
+    });
+  }
+
 </script>
 <!-- End line of javascript -->
 </body>
