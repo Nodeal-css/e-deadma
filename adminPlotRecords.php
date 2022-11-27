@@ -194,7 +194,7 @@
                     </tr>
                 </table>
                 <div class="deed w3-container w3-center">
-                    <h4>Cemetery Deed...</h4>
+                    <h4>Cemetery Deed</h4>
                     <div>
                         <div onclick="openPDFwindow();">
                                 <iframe src="" id="deed-thumbnail" type="application/pdf" height="140" width="120"></iframe> 
