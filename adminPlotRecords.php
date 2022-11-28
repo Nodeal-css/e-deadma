@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<!-- CSS  -->
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css?v=<?php echo time(); ?>">
     
     <!-- Iconscout CSS para sa mga icons ne -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
@@ -71,7 +71,7 @@
             </div>
             <div>
                 <p id="active-user" style="float:left;margin-top: 20px;margin-right: 10px;"></p>
-                <img src="assets/PP.webp" alt="">
+                <img src="assets/adminprofile.png" alt="">
             </div>
         </div>
 
@@ -153,14 +153,14 @@
             <div class="w3-col s6">
                 <table class="w3-table">
                     <tr><td></td><td><b>Plot</b></td></tr>
-                    <tr><td class="w3-right">Date purchased: </td><td><input type="text" class="w3-input" name="vw-date-purchase" id="vw-date-purchase" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">Price: </td><td><input type="text" class="w3-input" name="vw-price" id="vw-price" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">Status: </td><td><input type="text" class="w3-input" name="vw-status" id="vw-status" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">Square meters: </td><td><input type="text" class="w3-input" name="vw-sqr-meters" id="vw-sqr-meters" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">plot: </td><td><input type="text" class="w3-input" name="vw-plot-id" id="vw-plot-id" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">grave id: </td><td><input type="text" class="w3-input" name="vw-grave-id" id="vw-grave-id" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">Date purchased: </td><td><input type="text" class="w3-input" name="vw-date-purchase" id="vw-date-purchase" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right">Price: </td><td><input type="text" class="w3-input" name="vw-price" id="vw-price" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right">Status: </td><td><input type="text" class="w3-input" name="vw-status" id="vw-status" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right">Square meters: </td><td><input type="text" class="w3-input" name="vw-sqr-meters" id="vw-sqr-meters" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right"></td><td><input type="hidden" class="w3-input" name="vw-plot-id" id="vw-plot-id" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right"></td><td><input type="hidden" class="w3-input" name="vw-grave-id" id="vw-grave-id" style="width:80%;" readonly></td></tr>
                 </table>
-                <div class="w3-container w3-center w3-round-xlarge" style="width: 100%;min-height: 190px;background-color: royalblue;">
+                <div class="w3-container w3-center w3-round-xlarge" style="width: 100%;min-height: 190px;border: 1px solid;">
                     <h4>Cemetery deed...</h4>
                     <div>
                         <div onclick="openPDFwindow();">
@@ -169,7 +169,7 @@
                         <form id="file-upload">
                             <input type="hidden" name="upload-plot-id" id="upload-plot-id">
                             <input type="file" name="upload-pdf" id="upload-pdf" accept="application/pdf">
-                            <button type="submit" class="w3-button" id="submit-pdf">Upload</button>
+                            <button type="submit" class="w3-button w3-indigo" id="submit-pdf">Upload</button>
                         </form>
                     </div>
                 </div>
@@ -177,15 +177,15 @@
             <div class="w3-col s6">
                 <table class="w3-table">
                     <tr><td></td><td><b>Owner</b></td></tr>
-                    <tr><td class="w3-right">First name: </td><td><input type="text" class="w3-input" name="vw-fname" id="vw-fname" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">Last name: </td><td><input type="text" class="w3-input" name="vw-lname" id="vw-lname" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">Middle initial: </td><td><input type="text" class="w3-input" name="vw-mi" id="vw-mi" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">Street address: </td><td><input type="text" class="w3-input" name="vw-street" id="vw-street" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">City address: </td><td><input type="text" class="w3-input" name="vw-city" id="vw-city" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">Zip code: </td><td><input type="text" class="w3-input" name="vw-zip" id="vw-zip" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">Phone #: </td><td><input type="text" class="w3-input" name="vw-phone" id="vw-phone" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">Email: </td><td><input type="text" class="w3-input" name="vw-email" id="vw-email" style="width:80%;"></td></tr>
-                    <tr><td class="w3-right">owner: </td><td><input type="text" class="w3-input" name="vw-owner-id" id="vw-owner-id" style="width:80%;"></td></tr>
+                    <tr><td class="w3-right">First name: </td><td><input type="text" class="w3-input" name="vw-fname" id="vw-fname" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right">Last name: </td><td><input type="text" class="w3-input" name="vw-lname" id="vw-lname" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right">Middle initial: </td><td><input type="text" class="w3-input" name="vw-mi" id="vw-mi" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right">Street address: </td><td><input type="text" class="w3-input" name="vw-street" id="vw-street" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right">City address: </td><td><input type="text" class="w3-input" name="vw-city" id="vw-city" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right">Zip code: </td><td><input type="text" class="w3-input" name="vw-zip" id="vw-zip" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right">Phone #: </td><td><input type="text" class="w3-input" name="vw-phone" id="vw-phone" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right">Email: </td><td><input type="text" class="w3-input" name="vw-email" id="vw-email" style="width:80%;" readonly></td></tr>
+                    <tr><td class="w3-right"></td><td><input type="hidden" class="w3-input" name="vw-owner-id" id="vw-owner-id" style="width:80%;" readonly></td></tr>
                 </table>
             </div>
         </div>

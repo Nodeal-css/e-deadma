@@ -1,5 +1,5 @@
 /* ===== Google Font Import - Poppins ===== */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
 *{
     margin: 0;
     padding: 0;
@@ -19,6 +19,7 @@
     --box2-color: #ff7f4dc7;
     --box3-color: #ff7f4dc7;
     --title-icon-color: #fff;
+    --hover-color: #bcbcbc;
 
     --tran-05: all 0.5s ease;
     --tran-03: all 0.3s ease;
@@ -40,7 +41,7 @@ body{
 }
 ::-webkit-scrollbar-thumb {
     background: var(--primary-color);
-    border-radius: 8px;
+    border-radius: 12px;
     transition: all 0.3s ease;
 }
 
@@ -175,7 +176,7 @@ nav.close ~ .dashboard{
     width: calc(100% - 250px);
     justify-content: space-between;
     align-items: center;
-    padding: 10px 14px;
+    padding: 2px;
     background-color: var(--panel-color);
     transition: var(--tran-05);
     z-index: 1;
@@ -192,15 +193,16 @@ nav.close ~ .dashboard .top{
 .dashboard .top .search-box{
     position: relative;
     height: 35px;
-    max-width: 300px;
+    max-width: 250px;
     width: 100%;
     margin: 0 70px;
+    
 }
 .top .search-box input{
-    position: absolute;
-    border: 1px solid var(--border-color);
+    position: relative;
+    border: 1px solid var(--black-light-color);
     background-color: var(--panel-color);
-    padding: 0 25px 0 50px;
+    padding: 0 10px;
     border-radius: 5px;
     height: 100%;
     width: 100%;
@@ -211,42 +213,25 @@ nav.close ~ .dashboard .top{
 }
 .top .search-box i{
     position: absolute;
-    left: 15px;
+    right: 10px;
     font-size: 22px;
-    z-index: 10;
     top: 50%;
     transform: translateY(-50%);
     color: var(--black-light-color);
+    cursor: pointer;
 }
-
-.map-search-box{
-    position: relative;
-    height: 35px;
-    max-width: 300px;
-    width: 100%;
-    margin: 20px 100px;
-}
-.map-search-box input{
-    position: absolute;
-    border: 1px solid var(--border-color);
-    background-color: var(--panel-color);
-    padding: 0 25px 0 50px;
-    border-radius: 5px;
-    height: 100%;
-    width: 100%;
-    color: var(--text-color);
-    font-size: 15px;
-    font-weight: 400;
-    outline: none;
-}
-.map-search-box i{
-    position: absolute;
-    left: 15px;
-    font-size: 22px;
-    z-index: 10;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--black-light-color);
+/*
+.top .search-box i:hover{
+    padding: 1px;
+    background: #bcbcbc;
+    z-index: 1;
+}*/
+.top #active-user {
+    float: left;
+    margin-top: 20px;
+    margin-right: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .top img{
@@ -279,6 +264,108 @@ nav.close ~ .dashboard .top{
     color: var(--text-color);
     margin-left: 10px;
 }
+.dash-content button{
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 10px 35px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 10px 2px;
+    float: right;
+    cursor: pointer;
+}
+.dash-content .w3-table th{
+    height: 50px;
+    text-align: center;
+}
+.dash-content .w3-table #table-body{
+    font-size: 15px;
+    font-weight: 400;
+}
+.dash-content .w3-table #table-body td{
+    text-align: center;
+}
+#table-body{
+    color: var(--black-light-color);
+    text-transform: uppercase;
+    text-align: justify;
+}
+#table-body tr:hover{
+    background: var(--hover-color);
+}
+.w3-table, tr, th {
+    border-bottom: 1px solid var(--primary-color);
+    border-radius: 10px;
+    vertical-align: bottom;
+    cursor: default;
+}
+/* ---------------- */
+#modal-insert .w3-modal-content{
+    border-radius: 15px;
+    margin-bottom: 5px;
+}
+#modal-insert .w3-modal-content span{
+    color: white;
+    background-color: rgb(223, 116, 67);
+    border-radius: 10px;
+}
+#modal-update .w3-modal-content{
+    border-radius: 15px;
+    margin-bottom: 5px;
+}
+#modal-update .w3-modal-content span{
+    color: white;
+    background-color: rgb(223, 116, 67);
+    border-radius: 10px;
+}
+.w3-modal-content .pad{
+    background-color: rgb(223, 116, 67);
+    border-radius: 10px;
+}
+.w3-modal-content .pad h2{
+    font-size: 40px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--title-icon-color)
+}
+.w3-modal-content .head{
+    background-color: rgb(223, 116, 67);
+    border-radius: 10px;
+}
+.w3-modal-content .head h2{
+    font-size: 40px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--title-icon-color)
+}
+.isert p{
+    padding-top: 17px;
+    font-weight: 500;
+    font-size: 17px;
+}
+.isert1 p{
+    padding-top: 17px;
+    font-weight: 500;
+    font-size: 17px;
+}
+.isert button{
+    background-color: rgb(223, 116, 67);
+    color: white;
+    margin-top: 8px;
+}
+.w3-modal-content .btn-up .bs{
+    background-color: rgb(223, 116, 67);
+    color: white;
+}
+.w3-modal-content .btn-up .bd{
+    margin-right: 10px;
+    background-color: rgb(218, 52, 48);
+    color: white;
+}
+/* ---------------- */
 .dash-content .boxes{
     display: flex;
     align-items: center;

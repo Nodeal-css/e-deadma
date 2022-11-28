@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<link rel="stylesheet" href="css/admin.css">
+	<link rel="stylesheet" href="css/admin.css?v=<?php echo time(); ?>">
     
     <!-- Iconscout CSS para sa mga icons ne -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
@@ -84,7 +84,7 @@
             </div>
             <div>
                 <p id="active-user" style="float:left;margin-top: 20px;margin-right: 10px;"></p>
-                <img src="assets/PP.webp" alt="">
+                <img src="assets/adminprofile.png" alt="">
             </div>
         </div>
         <!-- Start Workspace-->
@@ -196,7 +196,7 @@
 			</div>
 		<!-- End modal Main Content -->
 		<div class="w3-container" id="modal-footer">
-			<input type="text" name="grave-id" id="grave-id">
+			<input type="hidden" name="grave-id" id="grave-id">
 			<button onclick="deleteBlock();" class="w3-button w3-right w3-margin w3-red w3-round-xxlarge">Remove Grave</button>
 		</div>
 	</div>
@@ -839,6 +839,42 @@
 				
 			}
 		});
+	}
+
+	//Updating the deceased_record's grave_id to null
+	//loadDeceasedModal()
+	function removeDeceasedInGrave(deceased_id){
+		if(confirm("Are you sure you want to remove this record in the grave?")){
+			$.ajax({
+				type: 'post',
+				url: 'includes/removeRecordFromGrave.php',
+				data: {
+					deceased: deceased_id
+				}, 
+				success:function(result, status){
+					alert(result);
+					loadDeceasedModal();
+				}
+			});
+		}
+	}
+
+	//updating the plot_record's grave_id to null
+	//loadPlotModal()
+	function removePlotInGrave(plot_id){
+		if(confirm("Are you sure you want to remove this plot record in the grave?")){
+			$.ajax({
+				type: 'post',
+				url: 'includes/removeRecordFromGrave.php',
+				data: {
+					plot: plot_id
+				}, 
+				success:function(result, status){
+					alert(result);
+					loadPlotModal();
+				}
+			});
+		}
 	}
 
 // End of #modal-grave javascript

@@ -68,7 +68,7 @@
             </div>
             <div>
                 <p id="active-user" style="float:left;margin-top: 20px;margin-right: 10px;"></p>
-                <img src="assets/PP.webp" alt="">
+                <img src="assets/adminprofile.png" alt="">
             </div>
         </div>
 
@@ -82,14 +82,17 @@
                 <div class="w3-card-4 w3-row">
                   <div class="w3-col s7" id="curve_chart" style="width: 550px; height: 400px"></div>
                   <div class="w3-col s5" style="padding-top: 40px;">
-                      <div style="font-size: 10px; height: 200px; overflow: scroll;">
+                      <div style="font-size: 10px; height: 160px; overflow: scroll;">
                           <header><b>Journal entry</b></header>
                             <table class="w3-table" id="journal-table">
 
                             </table>
                       </div><br>
-                      <div>
-                          <header>Report</header>
+                      <div style="font-size: 10px; height: 160px; overflow: scroll;">
+                          <header><b>Report</b></header>
+                          <table class="w3-table" id="financial-report">
+                              
+                          </table>
                       </div>
                   </div>
                 </div>
@@ -108,6 +111,7 @@
     getSession();
 
     getAllJournal();
+    getAllFinancialReport();
   });
 
   // this function checks for session, will automatically load with the document
@@ -211,7 +215,7 @@
                 ]);
 
               var options = {
-                title: 'Must exceed at least 5 months to display full graph',
+                title: '\t\tMust exceed at least 5 months to display full graph',
                 curveType: 'function',
                 legend: { position: 'bottom' }
               };
@@ -238,9 +242,50 @@
     });
   }
 
-  //Function to populate the google chart and send a JSON data to drawChart function
-  function populateChart(){
+  //display all journal but with parameter of financial report_id
+  function getJournalFromReport(report_id){
+    $.ajax({
+       type: 'post',
+       url: 'includes/getAllJournal.php',
+       data: {
+          report: report_id
+       },
+       success:function(result, status){
+          $("#journal-table").html(result);
+       }
+    });
+  }
 
+  //Display all financial report
+  function getAllFinancialReport(){
+      $.ajax({
+         type: 'post',
+         url: 'includes/getAllFinancialReport.php',
+         data: {
+            request: 'financial'
+         },
+         success:function(result, status){
+            $("#financial-report").html(result);
+         }
+      });
+  }
+
+  //Deleting a journal entry and will also update the total inside financial report
+  function deleteJournal(journal_id){
+    if(confirm('Do you want to delete this journal entry?')){
+      $.ajax({
+          type: 'post',
+          url: 'includes/deleteJournal.php',
+          data: {
+              journal: journal_id
+          },
+          success:function(result, status){
+              alert(result);
+              getAllJournal();
+              drawChart();
+          }
+      });
+    }
   }
 
 </script>

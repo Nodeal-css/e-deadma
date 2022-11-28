@@ -25,6 +25,7 @@ if(isset($_POST['grave_id'])){
                     "<tr><td>Date acquired: </td><th>" . $row['date_purchased'] . "</th></tr>" .
                     "<tr><td>Status: </td><th>" . $row['ownership_status'] . "</th></tr>" .
                     "<tr><td>Grave no: </td><th>" . $row['grave_id'] . "</th></tr>" .
+                    "<tr><td></td><td><button onclick='removePlotInGrave(". $row['plot_id'] .");' class='w3-button-tiny w3-right w3-round-xxlarge' style='color:white; background-color: rgb(223, 116, 67);'>Remove</button></td></tr>".
                 "</table>" .
                 "</div>" .
                 "</div>";

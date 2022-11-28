@@ -16,7 +16,8 @@ if(isset($_POST['grave_id'])){
                      "<div class='w3-panel w3-round-xlarge w3-col s9'>" .
                      "<h3>" . $row['name'] . "</h3>" .
                      "<i style='color: rgb(223, 116, 67);'>" . $row['epitaph'] . "</i>" .
-                     "<p style='color: #636363;'>DOB: " . $row['birth_date'] . ' - DOD:' . $row['burial_date'] . "</p>" .
+                     "<div><p class='w3-left' style='color: #636363;'>DOB: " . $row['birth_date'] . ' - DOD:' . $row['burial_date'] . "</p>" .
+                     "<button onclick='removeDeceasedInGrave(". $row['deceased_id'] .");' class='w3-button-tiny w3-right w3-round-xxlarge' style='color:white; background-color: rgb(223, 116, 67);'>Remove</button></div>" .
                      "</div>
                         <hr style='border-bottom: 1px solid #8c8b8b;'>
                      </div>";
