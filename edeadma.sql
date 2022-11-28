@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 10, 2022 at 02:50 PM
+-- Generation Time: Nov 28, 2022 at 03:33 PM
 -- Server version: 5.7.31
--- PHP Version: 7.3.21
+-- PHP Version: 7.4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -49,10 +49,10 @@ CREATE TABLE IF NOT EXISTS `authorized_account` (
 --
 
 INSERT INTO `authorized_account` (`account_id`, `cemetery_id`, `username`, `acc_password`, `fname`, `lname`, `mi`, `street`, `city`, `zip`, `account_type`) VALUES
-(1, 2, 'user1', 'user1', 'Phil', 'Thor', 'M', 'San Vicente Dr.', 'Carcar City, Cebu', '6019', 'ADMIN'),
+(1, 2, 'unavailable', 'unavailable', 'Phil', 'Thor', 'M', 'San Vicente Dr.', 'Carcar City, Cebu', '6019', 'ADMIN'),
 (2, 3, 'user3', 'user3', 'Newton', 'Gab', 'M', 'San Vicente', 'Carcar City', '6019', 'ADMIN'),
 (3, 3, 'user4', 'user4', 'Tron', 'Newman', 'R', '6 Argyll St', 'London', '6019', 'ADMIN'),
-(4, NULL, 'user22', 'user22', 'asdf', 'asdf', 'a', 'asdf', 'asdf', 'asdf', 'ADMIN');
+(4, NULL, 'notsetcemetery', 'notsetcemetery', 'asdf', 'asdf', 'a', 'asdf', 'asdf', 'asdf', 'ADMIN');
 
 -- --------------------------------------------------------
 
@@ -78,8 +78,8 @@ CREATE TABLE IF NOT EXISTS `cemetery` (
 --
 
 INSERT INTO `cemetery` (`cemetery_id`, `cemetery_name`, `street`, `city`, `zip`, `cemetery_type`, `pass_code`, `cemetery_map_img`) VALUES
-(2, 'Triumphant', 'dapdap', 'carcar', '6099', 'PRIVATE', '12345', NULL),
-(3, 'Manila Memorial', 'San Jose Street', 'Lapu-Lapu', '8712', 'PUBLIC', '12345', 'D:/WAMP/www/edeadma/maps/16680915692ekoyndx71151.jpg');
+(2, 'Triumphant', 'dapdap', 'carcar', '6099', 'PRIVATE', '12345', 'D:/WAMP/www/edeadma/maps/1668170636Screenshot (433).png'),
+(3, 'Manila Memorial', 'San Jose Street', 'Lapu-Lapu', '8712', 'PUBLIC', '12345', 'D:/WAMP/www/edeadma/maps/1668851861st martha.png');
 
 -- --------------------------------------------------------
 
@@ -94,20 +94,15 @@ CREATE TABLE IF NOT EXISTS `cemetery_deed` (
   `document` varchar(120) DEFAULT NULL,
   PRIMARY KEY (`deed_id`),
   UNIQUE KEY `plot_id` (`plot_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `cemetery_deed`
 --
 
 INSERT INTO `cemetery_deed` (`deed_id`, `plot_id`, `document`) VALUES
-(60, 27, 'D:/WAMP/www/edeadma/documents/1667916521Assignment 2.pdf'),
-(61, 28, 'D:/WAMP/www/edeadma/documents/1667913984Assignment 1.pdf'),
-(62, 29, 'D:/WAMP/www/edeadma/documents/1667914003Story Analysis.pdf'),
-(63, 36, 'D:/WAMP/www/edeadma/documents/1667914113Finals.pdf'),
-(64, 30, 'D:/WAMP/www/edeadma/documents/1667914193Story Analysis.pdf'),
-(65, 31, 'D:/WAMP/www/edeadma/documents/1667914216Data Dictionary.pdf'),
-(66, 34, 'D:/WAMP/www/edeadma/documents/1667916496ERDFinal.pdf');
+(10, 102, 'D:/WAMP/www/edeadma/documents/166886065419882448231.pdf'),
+(11, 103, 'D:/WAMP/www/edeadma/documents/166887261019882448231.pdf');
 
 -- --------------------------------------------------------
 
@@ -131,19 +126,96 @@ CREATE TABLE IF NOT EXISTS `deceased` (
   PRIMARY KEY (`deceased_id`),
   KEY `grave_id` (`grave_id`),
   KEY `cemetery_id` (`cemetery_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `deceased`
 --
 
 INSERT INTO `deceased` (`deceased_id`, `grave_id`, `cemetery_id`, `fname`, `lname`, `mi`, `burial_date`, `birth_date`, `marital_status`, `age`, `epitaph`) VALUES
-(1, NULL, 2, 'Hamon', 'user', 'R', '2022-10-07', '2022-10-28', 'Divorced', 66, 'Rest in Peace'),
-(2, 1, 3, 'Jacky', 'Luv', 'A', '2022-02-04', '2022-11-30', 'Single', 21, 'To God be all the glory'),
-(3, 2, 3, 'Tom', 'Innit', 'Q', '2022-01-01', '2022-12-31', 'Married', 67, 'In loving memory'),
-(4, 2, 3, 'Galg', 'Jeager', 'F', '2022-10-01', '2022-10-29', 'Separated', 19, 'Holy'),
-(5, NULL, 3, 'Hosha', 'Shin', 'T', '2022-10-14', '2022-10-07', 'Widowed', 44, 'Holy'),
-(6, NULL, 3, 'Ann', 'Greek', 'D', '2022-10-06', '2022-10-28', 'Married', 11, 'Rest in Peace');
+(11, NULL, 3, 'SAMPLE', 'Sample', 'O', '2022-11-12', '2022-11-29', '', 20, 'Rest in Peace'),
+(12, 83, 3, 'death', 'death', 'D', '2022-11-04', '2022-11-26', 'Separated', 12, 'Rest in Peace'),
+(13, 83, 3, 'Doroth', 'Gremmy', 'Y', '2022-11-05', '2022-11-22', 'Married', 22, 'Rest in peace'),
+(14, 92, 3, 'Harry', 'Potter', 'D', '2022-12-03', '2022-11-28', 'Widowed', 12, 'Holy'),
+(15, 87, 3, 'men', 'men', 'm', '2022-11-07', '2022-11-26', 'Married', 60, 'Holy'),
+(16, 77, 3, 'woman', 'woman', 'F', '2022-11-12', '2022-11-05', 'Married', 66, 'Holy'),
+(17, 82, 3, 'Kenny', 'Mato', 'Q', '2022-11-11', '2022-11-05', 'Widowed', 12, 'Holy'),
+(18, 79, 3, 'old', 'old', 'G', '2013-12-12', '2022-11-19', 'Widowed', 23, 'Holy'),
+(19, NULL, 3, 'hon', 'ney', 'q', '2022-11-12', '2022-11-12', 'Widowed', 77, 'Holy'),
+(20, NULL, 3, 'Jame', 'Morgen', 'Q', '2014-03-07', '2022-11-30', 'Single', 9, 'Holy'),
+(21, NULL, 3, 'Kira', 'Yoshikage', 'M', '2022-11-12', '2022-11-30', 'Single', 11, 'In loving memory');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `entry_journal`
+--
+
+DROP TABLE IF EXISTS `entry_journal`;
+CREATE TABLE IF NOT EXISTS `entry_journal` (
+  `journal_id` int(11) NOT NULL AUTO_INCREMENT,
+  `report_id` int(11) NOT NULL,
+  `entry_date` date NOT NULL,
+  `account` varchar(30) NOT NULL,
+  `ledger` varchar(40) NOT NULL,
+  `debit` double(10,2) DEFAULT NULL,
+  `credit` double(10,2) DEFAULT NULL,
+  `description` varchar(120) DEFAULT NULL,
+  PRIMARY KEY (`journal_id`),
+  KEY `report_id` (`report_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `entry_journal`
+--
+
+INSERT INTO `entry_journal` (`journal_id`, `report_id`, `entry_date`, `account`, `ledger`, `debit`, `credit`, `description`) VALUES
+(2, 3, '2022-03-11', 'EXPENSE', 'INTERNET', 1999.59, 0.00, 'PLDT bill'),
+(3, 2, '2022-02-01', 'EXPENSE', 'ELECTRIC', 1000.00, 0.00, 'Electricity bill'),
+(4, 4, '2022-04-29', 'EXPENSE', 'WATER', 196.00, 0.00, 'Water bill'),
+(5, 1, '2022-01-22', 'EXPENSE', 'CONTRACTED_SERVICES', 2000.00, 0.00, 'Contracted burial service'),
+(6, 1, '2022-01-31', 'REVENUE', 'SALES', 0.00, 5000.00, 'sold one of the burial plots'),
+(7, 5, '2022-05-01', 'REVENUE', 'COMMISSION_EARNED', 0.00, 2500.00, 'Commissioned a burial '),
+(8, 2, '2022-02-11', 'REVENUE', 'SALES', 0.00, 6000.00, 'Sold a burial plot'),
+(9, 6, '2022-01-08', 'REVENUE', 'SERVICES_SALES', 0.00, 7000.00, 'Sold a burial plot at triumphant'),
+(10, 6, '2022-01-22', 'EXPENSE', 'WATER', 169.00, 0.00, 'paid water bill for the month of january'),
+(11, 6, '2022-01-22', 'EXPENSE', 'INSURANCE', 1400.00, 0.00, 'Insurance '),
+(12, 6, '2022-01-15', 'REVENUE', 'SERVICE_REVENUE', 0.00, 1600.00, 'Sold burial service'),
+(13, 7, '2022-06-10', 'EXPENSE', 'MAINTENANCE_EQUIPMENT', 4000.00, 0.00, 'Maintenance of vehicle'),
+(16, 3, '2022-03-18', 'REVENUE', 'SALES', 0.00, 3000.00, 'Sold a burial plot'),
+(17, 8, '2022-07-07', 'REVENUE', 'SERVICES_SALES', 0.00, 5000.00, 'Sold burial plot');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `financial_report`
+--
+
+DROP TABLE IF EXISTS `financial_report`;
+CREATE TABLE IF NOT EXISTS `financial_report` (
+  `report_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cemetery_id` int(11) NOT NULL,
+  `date_from` date NOT NULL,
+  `date_to` date NOT NULL,
+  `total_revenue` double(10,2) DEFAULT NULL,
+  `total_expense` double(10,2) DEFAULT NULL,
+  PRIMARY KEY (`report_id`),
+  KEY `cemetery_id` (`cemetery_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `financial_report`
+--
+
+INSERT INTO `financial_report` (`report_id`, `cemetery_id`, `date_from`, `date_to`, `total_revenue`, `total_expense`) VALUES
+(1, 3, '2022-01-01', '2022-01-31', 5000.00, 2000.00),
+(2, 3, '2022-02-01', '2022-02-28', 6000.00, 1000.00),
+(3, 3, '2022-03-01', '2022-03-31', 3000.00, 1999.59),
+(4, 3, '2022-04-01', '2022-04-30', 0.00, 196.00),
+(5, 3, '2022-05-01', '2022-05-31', 2500.00, 0.00),
+(6, 2, '2022-01-01', '2022-01-31', 8600.00, 1569.00),
+(7, 3, '2022-06-01', '2022-06-30', 0.00, 4000.00),
+(8, 3, '2022-07-01', '2022-07-31', 5000.00, 0.00);
 
 -- --------------------------------------------------------
 
@@ -165,15 +237,25 @@ CREATE TABLE IF NOT EXISTS `grave_location` (
   `y4` varchar(15) NOT NULL,
   PRIMARY KEY (`grave_id`),
   KEY `cemetery_id` (`cemetery_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `grave_location`
 --
 
 INSERT INTO `grave_location` (`grave_id`, `cemetery_id`, `x1`, `y1`, `x2`, `y2`, `x3`, `y3`, `x4`, `y4`) VALUES
-(1, 3, '904', '527', '925', '598', '974', '585', '544', '495'),
-(2, 3, '904', '527', '925', '598', '1004', '585', '106', '989');
+(73, 3, '348', '6', '348', '6', '348', '6', '348', '6'),
+(77, 3, '554', '345', '548', '362', '570', '368', '577', '351'),
+(79, 3, '446', '309', '434', '331', '451', '343', '463', '317'),
+(81, 3, '425', '276', '422', '287', '442', '296', '447', '281'),
+(82, 3, '374', '288', '365', '310', '381', '320', '391', '298'),
+(83, 3, '375', '230', '389', '240', '374', '268', '361', '263'),
+(85, 3, '342', '214', '355', '221', '340', '250', '330', '243'),
+(86, 3, '316', '261', '327', '265', '317', '282', '306', '279'),
+(87, 3, '272', '236', '314', '255', '292', '292', '251', '271'),
+(92, 3, '422', '63', '437', '67', '423', '101', '410', '95'),
+(103, 3, '391', '162', '426', '174', '416', '201', '386', '190'),
+(104, 3, '407', '309', '422', '318', '407', '346', '392', '337');
 
 -- --------------------------------------------------------
 
@@ -193,20 +275,17 @@ CREATE TABLE IF NOT EXISTS `owner` (
   `phone_no` varchar(15) DEFAULT NULL,
   `email` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`owner_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `owner`
 --
 
 INSERT INTO `owner` (`owner_id`, `fname`, `lname`, `mi`, `street`, `city`, `zip`, `phone_no`, `email`) VALUES
-(12, 'Recardo', 'Ronaldo', 'F', 'San Roque St.', 'Argao City', '2131', '988716211', 'recardo@example.com'),
-(13, 'Fejard', 'Fajardo', 'M', 'St. August st.', 'Sibonga', '1872', '922121131', 'Fejard@example.com'),
-(14, 'Hanny', 'Enriquez', 'R', 'San Vicente St.', 'Carcar City', '9211', '98872124', 'Hanny@example.com'),
-(15, 'Flippa', 'Martha', 'O', 'St. Elizabeth st.', 'Cebu City', '9821', '988721241', 'Flippa@example.com'),
-(16, 'George', 'Found', 'H', 'St. Francis st.', 'Naga City', '21313', '988212311', 'George@example.com'),
-(17, 'Santa', 'Clause', 'G', 'St. Nicolas street', 'Artic', '1212', '3123123123', 'santa@example.com'),
-(18, 'Marzi', 'Filma', 'G', 'st. nicolas street', 'Cebu', '12313', '123123', '@example.com');
+(40, 'Beth', 'Amber', 'T', 'street', 'City', '111', '09882133', '@examplecom'),
+(41, 'Cameron', 'Blue', 'G', 'St. john street', 'New York', '2313', '09882122231', '@example.com'),
+(42, 'tom', 'Dam', 'D', 'san vicente drive', 'Carcar city', '6019', '09221313', '@example.com'),
+(43, 'Jason', 'Mae', 'M', 'street', 'city', '123213', '09123', 'email');
 
 -- --------------------------------------------------------
 
@@ -225,30 +304,25 @@ CREATE TABLE IF NOT EXISTS `plot_ownership` (
   `ownership_status` varchar(20) NOT NULL,
   `square_meters` varchar(20) DEFAULT '2.5 x 8',
   PRIMARY KEY (`plot_id`),
-  KEY `grave_id` (`grave_id`),
+  UNIQUE KEY `grave_id` (`grave_id`),
   KEY `owner_id` (`owner_id`),
   KEY `cemetery_id` (`cemetery_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `plot_ownership`
 --
 
 INSERT INTO `plot_ownership` (`plot_id`, `grave_id`, `owner_id`, `cemetery_id`, `date_purchased`, `purchase_price`, `ownership_status`, `square_meters`) VALUES
-(27, 1, 12, 3, '2022-11-01', 111, 'active', 'sqr1'),
-(28, 2, 12, 3, '2022-11-01', 11111, 'active', 'sqr11'),
-(29, NULL, 13, 3, '2022-11-02', 222, 'active', 'sqr2'),
-(30, NULL, 13, 3, '2022-11-02', 22222, 'active', 'sqr22'),
-(31, NULL, 14, 3, '2022-11-03', 333, 'active', 'sqr3'),
-(32, NULL, 14, 3, '2022-11-03', 33333, 'active', 'sqr33'),
-(33, NULL, 15, 3, '2022-11-04', 444, 'active', 'sqr4'),
-(34, NULL, 15, 3, '2022-11-04', 44444, 'active', 'sqr44'),
-(35, NULL, 16, 3, '2022-11-05', 555, 'active', 'sqr5'),
-(36, NULL, 12, 3, '2022-11-19', 123, 'active', '2.6 x 9 meters'),
-(37, NULL, 17, 2, '2022-12-30', 6969, 'active', '2.6 x 9 meters'),
-(38, NULL, 17, 2, '2022-11-12', 1212, 'active', '2.6 x 9 meters'),
-(39, NULL, 18, 2, '2022-11-19', 12312312, 'active', '2.6 x 9 meters'),
-(40, NULL, 18, 2, '2022-11-18', 11111, 'active', '2.5 x 8 meters');
+(102, 85, 40, 3, '2022-11-05', 12321, 'active', '2.6 x 9 meters'),
+(103, NULL, 40, 3, '2022-11-05', 21000, 'active', '2.6 x 9 meters'),
+(105, 87, 42, 3, '2022-11-29', 1, 'active', '2.6 x 9 meters'),
+(106, NULL, 40, 3, '2022-11-11', 12, 'active', '2.6 x 9 meters'),
+(107, NULL, 42, 3, '2022-11-05', 213, 'active', '2.6 x 9 meters'),
+(110, NULL, 40, 3, '2022-11-12', 1111, 'active', '2.6 x 9 meters'),
+(111, NULL, 42, 3, '2022-11-05', 99, 'active', '2.6 x 9 meters'),
+(112, NULL, 40, 3, '2022-11-02', 213, 'active', '2.5 x 8 meters'),
+(113, NULL, 41, 3, '2022-11-05', 1, 'active', '2.6 x 9 meters');
 
 --
 -- Constraints for dumped tables
@@ -272,6 +346,18 @@ ALTER TABLE `cemetery_deed`
 ALTER TABLE `deceased`
   ADD CONSTRAINT `deceased_ibfk_1` FOREIGN KEY (`grave_id`) REFERENCES `grave_location` (`grave_id`),
   ADD CONSTRAINT `deceased_ibfk_2` FOREIGN KEY (`cemetery_id`) REFERENCES `cemetery` (`cemetery_id`);
+
+--
+-- Constraints for table `entry_journal`
+--
+ALTER TABLE `entry_journal`
+  ADD CONSTRAINT `entry_journal_ibfk_1` FOREIGN KEY (`report_id`) REFERENCES `financial_report` (`report_id`);
+
+--
+-- Constraints for table `financial_report`
+--
+ALTER TABLE `financial_report`
+  ADD CONSTRAINT `financial_report_ibfk_1` FOREIGN KEY (`cemetery_id`) REFERENCES `cemetery` (`cemetery_id`);
 
 --
 -- Constraints for table `grave_location`
