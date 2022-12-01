@@ -20,7 +20,7 @@
             <div class="logo-image">
                 <img src="assets/KG.png" alt="">
             </div>
-            <span class="logo_name">ReConnect</span>
+            <span class="logo_name">Grave.ly</span>
             
         </div>
 
