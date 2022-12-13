@@ -393,10 +393,10 @@
   	if(flag){
   		// for not existing owner record
         addPlotRecord2(fname, lname, mi, street, city, zip, phone, email, date_purchase, purchase_price, sqr);
-        displayPlotOwnership();
+        window.location.href = 'adminPlotRecords.php';
   	}else{
   		addPlotRecord1(id, owner, date_purchase, purchase_price, sqr);
-        displayPlotOwnership();
+        window.location.href = 'adminPlotRecords.php';
   	}
   }
 

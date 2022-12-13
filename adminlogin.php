@@ -69,7 +69,7 @@
                     <button class="btnn" onclick="login();">Login</button>
                     
                     <p class="link">Don't have an account<br>
-                    <a href="#" class="att">Create New Account </a> here</a></p>
+                    <a href="adminRegister.php" class="att">Create New Account </a> here</a></p>
                 </div>
                     </div>
                 </div>

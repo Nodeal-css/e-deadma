@@ -107,8 +107,10 @@
 						<button class="w3-button w3-bar-item w3-right w3-margin-top w3-animate-bottom" onclick="zoomOut();">-</button>
 					</div>
                     <div class="w3-col s9" style="width:800px;margin-right:20px;height:400px;overflow:scroll;">
-                    	<div id="workspace">
+						<div id="workspace">
+						<!--canvas id="canvas"-->
                     		<img src="" usemap="#map" id="map-pic" onclick="clickOnImage();">
+						<!--/canvas-->
                     	</div>
                     </div>
                     <div class="w3-col s3">
@@ -186,7 +188,7 @@
 				</div>
 			</div>
 			<div id="modal-assign-plot" class="w3-container w3-border city" style="display:none;height: 270px;">
-				<input type="text" name="modal-plot-id" id="modal-plot-id" readonly>
+				<input type="hidden" name="modal-plot-id" id="modal-plot-id" readonly>
 				<input type="text" class="w3-input" name="modal-owner-name" id="modal-owner-name" placeholder="Search name of the Plot owner">
 				<div id="plot-result" style="position:fixed;background-color: white;"></div>
 				<button onclick="placePlotToGrave();" class="w3-button w3-round-xxlarge w3-right w3-margin w3-indigo" style="color: white;">Save</button>
@@ -361,6 +363,7 @@
 		var w = $("#map-pic").width();
   		var h = $("#map-pic").height();
 		$("#workspace").width(w).height(h);
+		$("#canvas").width(w).height(h);
 		console.log("width: " + w);
   		console.log("height: " + h);
   	}
@@ -876,6 +879,11 @@
 			});
 		}
 	}
+
+// start javascript for canvas
+
+
+// end javascript for canvas
 
 // End of #modal-grave javascript
 </script>
