@@ -99,22 +99,43 @@
 
                 <!-- Start of the Map -->
                 <div style="width:100%;height:480px;" class="w3-row w3-card-4 w3-container">
-					<div class='w3-bar' style="width: 800px;">
+					<div class='w3-bar' style="width: 80%;">
 						<button class="w3-button w3-bar-item w3-left w3-margin-top w3-animate-bottom" onclick="document.getElementById('modal-import-map').style.display='block'" style="background-color: rgb(223, 116, 67);color: white;">Import map layout</button>
 						<button class="w3-button w3-bar-item w3-left w3-margin-top w3-animate-bottom" onclick="checkVacantGrave();" style="background-color: rgb(223, 116, 67);color: white;">Check vacant graves</button>
 						<button class="w3-button w3-bar-item w3-left w3-margin-top w3-animate-bottom" onclick="location.reload();" style="background-color: rgb(223, 116, 67);color: white;">Reload Map</button>
 						<button class="w3-button w3-bar-item w3-right w3-margin-top w3-animate-bottom" onclick="zoomIn();">+</button>
 						<button class="w3-button w3-bar-item w3-right w3-margin-top w3-animate-bottom" onclick="zoomOut();">-</button>
 					</div>
-                    <div class="w3-col s9" style="width:800px;margin-right:20px;height:400px;overflow:scroll;">
+                    <div class="w3-col s9" style="width: 80%; margin-right:20px;height:400px;overflow:scroll;">
 						<div id="workspace">
 						<!--canvas id="canvas"-->
                     		<img src="" usemap="#map" id="map-pic" onclick="clickOnImage();">
 						<!--/canvas-->
                     	</div>
                     </div>
-                    <div class="w3-col s3">
+                    <div class="w3-col s3" style="width: 17%;">
                     	<!-- This area or div will show the legends assigned-->
+						<div class="w3-card-2">
+							<h4 class="w3-center" >Legend</h4>
+							<table class="w3-table">
+								<tr>
+									<td><button class="w3-button w3-indigo w3-hover-indigo"></button></td>
+									<td>Grave</td>
+								</tr>
+								<tr>
+									<td><button class="w3-button w3-green w3-hover-green"></button></td>
+									<td>Vacant</td>
+								</tr>
+								<tr>
+									<td><button class="w3-button w3-red w3-hover-red"></button></td>
+									<td>Occupied</td>
+								</tr>
+								<tr>
+									<td><button class="w3-button w3-yellow w3-hover-yellow"></button></td>
+									<td>Search</td>
+								</tr>
+							</table>
+						</div>
                     </div>
                 </div>
 				
