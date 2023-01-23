@@ -19,11 +19,11 @@
         height: auto;
         max-width: 100%;
         width: auto;
-    	}*/
+    	}
 
     	#workspace{
             position: relative;
-        }
+        }*/
         
 	</style>
 </head>
@@ -108,11 +108,12 @@
 					</div>
                     <div class="w3-col s9" style="width: 80%; margin-right:20px;height:400px;overflow:scroll;">
 						<div id="workspace">
-						<!--canvas id="canvas"-->
-                    		<img src="" usemap="#map" id="map-pic" onclick="clickOnImage();">
-						<!--/canvas-->
+							<canvas id="Canvas" >
+
+							</canvas>
+							<img src="" usemap="#map" id="map-pic" onclick="clickOnImage();">
                     	</div>
-                    </div>
+					</div>
                     <div class="w3-col s3" style="width: 17%;">
                     	<!-- This area or div will show the legends assigned-->
 						<div class="w3-card-2">
@@ -158,7 +159,7 @@
 
 <!-- Start of displaying map html -->
 <map name="map" id="map-display">
-	
+
 </map>
 <!-- End of displaying map html -->
 
@@ -238,7 +239,10 @@
 		displayImgMap();
 		deleteCacheImages();
 		checkOpenGrave();
+		
 	});
+	var mapImagePath;
+
 	//window.setTimeout(checkOpenGrave(), 9000); MIGHT Transfer this to pure php code
 	//Onload of image
 	$("#map-pic").on('load', function() {
@@ -434,6 +438,8 @@
 				document.getElementById('map-pic').src = result.substring(20);
 				console.log("output: " + result.substring(20));
 				console.log("status: " + status);
+				mapImagePath = result.substring(20);
+				mapSprite.src = mapImagePath;
 			}
 		});
 	}
@@ -901,10 +907,97 @@
 		}
 	}
 
+	/*test if workspace can be accessed in javascript
+	function clickWorkspace(){
+		$("#workspace").click(function (ev){
+			alert("Image path: " + document.getElementById('map-pic').src);
+		});
+	}*/
+
 // start javascript for canvas
 
+// Map sprite
+var canvas = document.getElementById('Canvas');
+var context = canvas.getContext('2d');
 
-// end javascript for canvas
+var mapSprite = new Image();
+
+var Marker = function() {
+  this.Sprite = new Image();
+  this.Sprite.src = "http://www.clker.com/cliparts/w/O/e/P/x/i/map-marker-hi.png"
+  this.Width = 12;
+  this.Height = 20;
+  this.XPos = 0;
+  this.YPos = 0;
+}
+
+var Markers = new Array();
+
+var mouseClicked = function(mouse) {
+  // Get corrent mouse coords
+  var rect = canvas.getBoundingClientRect();
+  var mouseXPos = (mouse.x - rect.left);
+  var mouseYPos = (mouse.y - rect.top);
+
+  console.log("Marker added + " + mapImagePath);
+
+  // Move the marker when placed to a better location
+  var marker = new Marker();
+  marker.XPos = mouseXPos - (marker.Width / 2);
+  marker.YPos = mouseYPos - marker.Height;
+
+  Markers.push(marker);
+}
+
+// Add mouse click event listener to canvas
+canvas.addEventListener("mousedown", mouseClicked, false);
+
+var firstLoad = function() {
+  context.font = "15px Georgia";
+  context.textAlign = "center";
+}
+
+firstLoad();
+
+var main = function() {
+  draw();
+};
+
+var draw = function() {
+  // Clear Canvas
+  context.fillStyle = "#000";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Draw map
+  // Sprite, X location, Y location, Image width, Image height
+  // You can leave the image height and width off, if you do it will draw the image at default size
+  context.drawImage(mapSprite, 0, 0, 700, 700);
+
+  // Draw markers
+  for (var i = 0; i < Markers.length; i++) {
+    var tempMarker = Markers[i];
+    // Draw marker
+    context.drawImage(tempMarker.Sprite, tempMarker.XPos, tempMarker.YPos, tempMarker.Width, tempMarker.Height);
+
+    // Calculate postion text
+    var markerText = "Postion (X:" + tempMarker.XPos + ", Y:" + tempMarker.YPos;
+
+    // Draw a simple box so you can see the position
+    var textMeasurements = context.measureText(markerText);
+    context.fillStyle = "#666";
+    context.globalAlpha = 0.7;
+    context.fillRect(tempMarker.XPos - (textMeasurements.width / 2), tempMarker.YPos - 15, textMeasurements.width, 20);
+    context.globalAlpha = 1;
+
+    // Draw position above
+    context.fillStyle = "#000";
+    context.fillText(markerText, tempMarker.XPos, tempMarker.YPos);
+  }
+};
+
+setInterval(main, (1000 / 60)); // Refresh 60 times a second
+
+//end javascript for canvas
 
 // End of #modal-grave javascript
 </script>
