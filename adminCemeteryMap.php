@@ -238,28 +238,23 @@
 		deleteCacheImages();
 		checkOpenGrave();
 
-		/*In the next session
-			- Limit the markers to 4 times only
-			- implement a function to clear the markers along with clear button
+		/*First session
+			-/ Limit the markers to 4 times only
+			-/ implement a function to clear the markers along with clear button
 			- Re-design the marker. maybe circle and also change color
+			-/ Evaluate if this function can be transferred to the onclick method of #map-pic
+
+		Issues:
+			- When web page is reloaded, the markers will dissapear. In case the user will click
+			  the vacant graves after placing few markers, the coordinates are retained except the
+			  markers. 
+			   a. checking for vacant graves
+			   b. confirming a modal prompt
+			   c.
+			- the coordinates and the markers should be synced.
+			- ran some test on syncing coords and markers, pls double check in the next session
 		*/
-		$('#map-pic').click(function() {
-      		$(".marker").remove();
-      			$(this).parent().append(
-        			$('<div>').addClass('marker').css({
-          				position: 'absolute',
-          				top: y + 'px',
-          				left: x + 'px',
-          				width: '10px',
-          				height: '10px',
-          				background: '#000000'
-        		})
-      		);
-			console.log('X coordinates: ' + x + "\nY coordinates: " + y);
-    	});
-		
 	});
-	//var mapImagePath;
 
 	//window.setTimeout(checkOpenGrave(), 9000); MIGHT Transfer this to pure php code
 	//Onload of image
@@ -493,6 +488,24 @@
 		}else{
 			alert('Reached the maximum points of adding a block');
 		}
+		markImage();
+	}
+
+	//Method to append a html tags to image, to create an animation of a marker
+	function markImage(){
+		//$('#map-pic').click(function() {
+			$('#map-pic').parent().append(
+				$('<div>').addClass('marker').css({
+					position: 'absolute',
+					top: y + 'px',
+					left: x + 'px',
+					width: '10px',
+					height: '10px',
+					background: '#000000'
+				})
+			);
+			//console.log('X coordinates: ' + x + "\nY coordinates: " + y);
+    	//});
 	}
 
 	//Clear the input fields of the coordinates by clicking the cear button
@@ -505,6 +518,7 @@
 		$("#y3").val('');
 		$("#x4").val('');
 		$("#y4").val('');
+		$(".marker").remove();
 	}
 
 	//Save coordinates to the database
@@ -611,9 +625,11 @@
 			success:function(result, status){
 				$("#map-display").html(result);
 				loadGraves();
+				clearCoordinates();
 				//console.log(result);
 			}
 		});
+		
 	}
 
 	//Function to delete a grave/block | done inside the modal
@@ -632,6 +648,7 @@
 				$("#grave-id").val('');
 				document.getElementById('modal-grave').style.display = 'none';
 				getAllCoordinates();
+				clearCoordinates();
 			}
 		});
 	}
@@ -902,6 +919,7 @@
 				success:function(result, status){
 					alert(result);
 					loadDeceasedModal();
+					//clearCoordinates();
 				}
 			});
 		}
@@ -920,6 +938,7 @@
 				success:function(result, status){
 					alert(result);
 					loadPlotModal();
+					//clearCoordinates();
 				}
 			});
 		}
