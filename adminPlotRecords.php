@@ -37,7 +37,7 @@
                 </a></li>
                 <li><a href="#">
                     <i class="uil uil-folder-open"></i>
-                    <span class="link-name">Plot Records</span>
+                    <span class="link-name">Contracts</span>
                 </a></li>
                 <li><a href="adminCemeteryMap.php">
                     <i class="uil uil-location-point"></i>
@@ -323,7 +323,7 @@
   		},
   		success:function(data, status){
   			var obj = JSON.parse(data);
-  			$("#logo_cem_name").html(obj.cemetery_name + " / Plot Records");
+  			$("#logo_cem_name").html(obj.cemetery_name + " / Contracts");
   			$("#active-user").html(obj.name);
             //console.log(obj.name);
             //console.log(obj.cemetery_name);

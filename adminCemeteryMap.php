@@ -50,7 +50,7 @@
                 </a></li>
                 <li><a href="adminPlotRecords.php">
                     <i class="uil uil-folder-open"></i>
-                    <span class="link-name">Plot Records</span>
+                    <span class="link-name">Contracts</span>
                 </a></li>
                 <li><a href="#">
                     <i class="uil uil-location-point"></i>
@@ -497,11 +497,11 @@
 			$('#map-pic').parent().append(
 				$('<div>').addClass('marker').css({
 					position: 'absolute',
-					top: y + 'px',
-					left: x + 'px',
+					top: (y - 5) + 'px',
+					left: (x - 5) + 'px',
 					width: '10px',
 					height: '10px',
-					background: '#000000'
+					background: '#063970'
 				})
 			);
 			//console.log('X coordinates: ' + x + "\nY coordinates: " + y);
